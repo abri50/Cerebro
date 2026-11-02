@@ -180,6 +180,13 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 21:15 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** implementada la reconstrucción completa del núcleo central con Three.js WebGL en `C:\dev\cerebro-dashboard\public\` (`index.html` y `app.js`). Creada la clase `CoreNeuralMeshOrb` con una malla poligonal esférica orgánica (red neuronal 3D / celosía viva) compuesta por `MeshBasicMaterial` con wireframe magenta profundo (`#e11d48`) y `THREE.Points` luminosos en rosa táctico (`#f43f5e`), núcleo interior sólido y brillante (`#fce7f3`), halo sináptico y anillo orbital táctico. Implementada deformación procedural en tiempo real con armónicos multi-sinusoidales que simulan respiración y movimiento orgánico, campo de 650 partículas estelares en el fondo oscuro (`#05020a`), y control interactivo de rotación con paralaje 3D y aceleración angular al aproximar el cursor al núcleo o ejecutar directivas (`isProcessing`).
+- **Estado:** núcleo 3D Three.js con malla poligonal sináptica y campo estelar operativo en `http://127.0.0.1:3000`.
+- **Siguiente:** —
+
+
+
 
 
 

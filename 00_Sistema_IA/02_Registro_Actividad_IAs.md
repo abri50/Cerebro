@@ -82,3 +82,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** sincronizados y fusionados los cambios de Intendencia (commit de Claude en remoto), Estrato (traspaso de Claude en local) y protocolo de IA / arranque. Bóveda subida a GitHub (`abri50/Cerebro`). Subidos a GitHub los commits locales con `AGENTS.md` en los 3 repositorios de `C:\dev` (`Estrato`, `asesor-financiero`, `combat-warrior-hub`).
 - **Estado:** los 4 repositorios sincronizados y limpios al 100% con `origin/main`.
 - **Siguiente:** el usuario rellena 00_Estado_Actual.md en la revisión semanal; publicar Release v0.1.0 de Estrato.
+
+
+## 2026-11-02 14:55 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** creado `00_Sistema_IA/06_Enrutado_IAs.md` (criterio de coste y derivación entre Claude, Antigravity, Gemini, NotebookLM y Usuario) y añadido como paso 3 en la secuencia de lectura de `AGENTS.md`.
+- **Estado:** enrutado de tareas documentado y enlazado en el arranque de agentes.
+- **Siguiente:** —

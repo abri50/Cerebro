@@ -130,3 +130,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** implementado el endpoint `POST /api/ejecutar-accion` en `server.js` con arquitectura modular (`actions.js` y `audit.js`). Añadidos comandos seguros locales: `ping_sistema` (telemetría de hardware y uptime), `chequear_yaml` (auditoría de frontmatter) y `forzar_reindex` (rescan de chokidar). Configurado log de auditoría persistente en `logs/audit.log` con IP 127.0.0.1, timestamp y estado. Validación de acciones con HTTP 400 y protección contra escrituras HTTP 405.
 - **Estado:** backend operativo con funciones de ejecución segura y auditoría en `127.0.0.1:3000`.
 - **Siguiente:** —
+
+
+## 2026-11-02 16:32 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** añadido el endpoint `GET /api/buscar?q=termino` en `server.js` y el método `search(query, limit)` en `indexer.js`. Almacenado el contenido Markdown parseado en memoria en el indexador, implementada ponderación de relevancia (título, ruta y contenido), extracción contextual de fragmentos (`extracto`) y límite a las 10 mejores coincidencias. Búsqueda insensible a mayúsculas verificada mediante tests automáticos.
+- **Estado:** motor de búsqueda en memoria operativo en el backend.
+- **Siguiente:** —

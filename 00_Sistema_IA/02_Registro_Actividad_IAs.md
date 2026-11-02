@@ -198,6 +198,13 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 22:00 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** creado el runner de smoke tests automatizados `test-api.js` en `C:\dev\cerebro-dashboard\`. Valida contra `http://127.0.0.1:3000` el estado y esquema de 5 endpoints críticos (`GET /api/status`, `GET /api/resumen`, `GET /api/buscar?q=test`, `GET /api/alerts`, `POST /api/ejecutar-accion` con `ping_sistema`). Salida formateada con colores ANSI (✔/✖, tiempos de respuesta y código de salida 0/1). Añadido el comando `"test:api": "node test-api.js"` en `package.json`. Suite ejecutada con 5/5 pruebas superadas.
+- **Estado:** suite de smoke test operativa y verificada en local.
+- **Siguiente:** —
+
+
+
 
 
 

@@ -1,0 +1,12 @@
+# Secretos
+.obsidian/plugins/obsidian-local-rest-api/data.json
+# Estado local de Obsidian (cambia constantemente, genera conflictos)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+# Índice de Smart Connections (se regenera solo)
+.smart-env/
+# Papelera y basura del sistema
+.trash/
+Thumbs.db
+desktop.ini
+.DS_Store

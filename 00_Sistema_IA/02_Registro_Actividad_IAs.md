@@ -186,6 +186,13 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 21:18 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** eliminado el círculo sólido/opaco interior de Three.js en `public/app.js` (`innerCore` y `innerCorona`), sustituyéndolo por un micro-núcleo translúcido de estructura icosaédrica en alambre (`#f43f5e`) y un diminuto nódulo de luz sináptica. Actualizados los textos de telemetría ("ONLINE", "Nodos activos") en `public/index.html` y `app.js` con contenedor 100% transparente y resplandor sutil (drop-shadow magenta/rosa), permitiendo apreciar toda la profundidad de la malla poligonal 3D y las partículas estelares sobre el fondo negro `#0f051d`.
+- **Estado:** núcleo sináptico 3D 100% translúcido y limpio operativo en `http://127.0.0.1:3000`.
+- **Siguiente:** —
+
+
+
 
 
 

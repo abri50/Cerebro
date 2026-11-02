@@ -100,3 +100,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** creado `00_Sistema_IA/05_Cola_Antigravity.md` (cola de trabajo para derivación entre IAs con formato T-AAAAMMDD-NN) y añadida la sección `## Cola de tareas` a `AGENTS.md`.
 - **Estado:** cola de tareas operativa y documentada para ejecución de órdenes mecánicas.
 - **Siguiente:** —
+
+
+## 2026-11-02 15:25 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** configurada la regla de usuario de enrutado y procesamiento de cola (`AGENTS.md` y `05_Cola_Antigravity.md`) a nivel global (`~/.gemini/config/rules/`, `~/.gemini/config/GEMINI.md`, `C:\Users\aam12\GEMINI.md`), en el entorno de desarrollo (`C:\dev\GEMINI.md`) y en la bóveda (`CEREBRO/GEMINI.md`).
+- **Estado:** regla permanente y activa tanto dentro de la bóveda como en cualquier proyecto o sesión externa de Antigravity.
+- **Siguiente:** —

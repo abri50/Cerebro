@@ -56,5 +56,5 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 
 ## 2026-11-02 12:58 — Antigravity (Gemini 3.8 Flash) — cerebro
 - **Hecho:** bóveda versionada en Git; creados `.gitignore` (excluye secretos de Local REST API, workspace y `.smart-env`) y `.gitattributes`, completada la auditoría de secretos (0 credenciales expuestas), configurada identidad global (`Abraham Almagro Martínez` / `abri50@users.noreply.github.com`), añadido protocolo de versionado a `01_Instrucciones_Generales.md`, realizado commit inicial (88 archivos) y configurado remoto `origin`.
-- **Estado:** commit inicial creado localmente; push pendiente de autenticación interactiva de GitHub.
-- **Siguiente:** ejecutar `git push -u origin main` desde el terminal interactivo del usuario para completar la vinculación con GitHub mediante GCM.
+- **Estado:** repositorio remoto sincronizado (rama `main` al día con `origin/main`).
+- **Siguiente:** configurar el plugin Obsidian Git (auto commit/push).

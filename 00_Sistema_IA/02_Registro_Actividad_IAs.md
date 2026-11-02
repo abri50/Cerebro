@@ -156,3 +156,10 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 17:21 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** sustituido el renderizado 2D del orbe central por un motor 3D interactivo real en WebGL con Three.js (`index.html` y `app.js`). Implementado shader GLSL personalizado con 4 octavas de Simplex Noise para simular plasma volcánico en ebullición (carmesí, naranja y blanco incandescente), efecto Fresnel para el borde limbo, anillos Torus 3D orbitales con inclinación real, sistema de 400 partículas de erupción solar, luces dinámicas (`AmbientLight` y `PointLight` orbital) e interactividad con el ratón (efecto de paralaje 3D fluido e intensificación de plasma y rotación vía `Raycaster` al hacer hover).
+- **Estado:** núcleo 3D WebGL Three.js plenamente operativo en producción local.
+- **Siguiente:** —
+
+
+

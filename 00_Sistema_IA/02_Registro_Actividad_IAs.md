@@ -58,3 +58,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** bóveda versionada en Git; creados `.gitignore` (excluye secretos de Local REST API, workspace y `.smart-env`) y `.gitattributes`, completada la auditoría de secretos (0 credenciales expuestas), configurada identidad global (`Abraham Almagro Martínez` / `abri50@users.noreply.github.com`), añadido protocolo de versionado a `01_Instrucciones_Generales.md`, realizado commit inicial (88 archivos) y configurado remoto `origin`.
 - **Estado:** repositorio remoto sincronizado (rama `main` al día con `origin/main`).
 - **Siguiente:** configurar el plugin Obsidian Git (auto commit/push).
+
+
+## 2026-11-02 13:40 — Claude (Sonnet 5.5) — intendencia
+- **Hecho:** completados `00_Resumen.md` (estado v79, repo, arquitectura), `Backlog.md` y `Decisiones.md` de `03_Proyectos/02_Intendencia`. Sin secretos escritos.
+- **Estado:** nota de Intendencia al día con v79.
+- **Siguiente:** revisar el Supabase real (segunda cuenta) y arreglar 5 tests dependientes de la fecha.

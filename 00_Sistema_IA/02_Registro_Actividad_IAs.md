@@ -136,3 +136,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** añadido el endpoint `GET /api/buscar?q=termino` en `server.js` y el método `search(query, limit)` en `indexer.js`. Almacenado el contenido Markdown parseado en memoria en el indexador, implementada ponderación de relevancia (título, ruta y contenido), extracción contextual de fragmentos (`extracto`) y límite a las 10 mejores coincidencias. Búsqueda insensible a mayúsculas verificada mediante tests automáticos.
 - **Estado:** motor de búsqueda en memoria operativo en el backend.
 - **Siguiente:** —
+
+
+## 2026-11-02 16:47 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** creado el módulo `watcher-alerts.js` integrado en `server.js` (ejecución al arrancar y de forma programada cada 1 hora). Realiza un barrido recursivo de la bóveda verificando campos YAML obligatorios (`tipo`, `area`, `estado`, `fecha`, reglas por tipo de `04_Esquema_YAML.md`). Volcado del reporte JSON en `public/data/alerts.json` y expuesto en el endpoint `GET /api/alerts`.
+- **Estado:** auditoría de integridad YAML activa y programada en el servidor.
+- **Siguiente:** —

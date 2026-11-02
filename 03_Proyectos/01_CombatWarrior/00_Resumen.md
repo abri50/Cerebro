@@ -16,7 +16,11 @@ tags: ["combatwarrior", "codigo", "proyecto"]
 
 combatwarrior.es — entrenamiento táctico y funcional, preparación para Tactical Games. Creador y director: Abraham Almagro Martínez.
 
+## Repositorio
+
+- **Ruta local:** `C:\dev\combat-warrior-hub`
+- **Remoto:** `https://github.com/abri50/combat-warrior-hub.git`
+
 > [!todo] Pendiente de completar
 > - URL de producción
-> - Repositorio GitHub
 > - Roadmap

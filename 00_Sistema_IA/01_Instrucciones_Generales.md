@@ -34,6 +34,7 @@ tags: []
 - **Escritorio (Windows):** Electron cuando haga falta interfaz completa; los procesos pesados se delegan en motores nativos.
 - **Infraestructura:** self-hosted o serverless antes que SaaS de pago.
 - **Impresión 3D:** Creality Ender 3 SE. Usa Cura y está pasando a su propio laminador, Estrato.
+- **Repositorios de código en local:** `C:\dev\<repo>`. Todo repo nuevo de un proyecto de CEREBRO debe incluir `AGENTS.md`, `GEMINI.md` y `CLAUDE.md` según el protocolo de traspaso.
 
 # DIRECTRICES PARA LA IA
 
@@ -83,3 +84,13 @@ El esquema de referencia por tipo de nota está en [[04_Esquema_YAML]]. Toda not
 # PROTOCOLO DE TRABAJO
 
 4. **Versionado:** la bóveda está en Git (repo privado abri50/cerebro). El plugin Obsidian Git hace commit y push automáticos. Las IAs no ejecutan comandos git destructivos (force, reset --hard, rebase) y nunca escriben secretos (API keys, tokens, contraseñas) en ninguna nota.
+
+
+## Protocolo de traspaso entre IAs
+**Al empezar una sesión de proyecto:** leer `00_Resumen.md`, `Backlog.md` y las 3 últimas entradas del registro sobre ese proyecto. No pedir al usuario contexto que ya esté en la bóveda.
+**Al terminar (obligatorio, aunque la sesión sea corta):**
+1. Actualizar `siguiente_accion` en el YAML del `00_Resumen.md` del proyecto.
+2. Actualizar `Backlog.md` (mover lo hecho, añadir lo nuevo).
+3. Si se tomó una decisión técnica, añadirla a `Decisiones.md` (fecha, decisión, motivo).
+4. Añadir la entrada correspondiente al registro de actividad.
+**Trabajo desde un repositorio de código:** el `AGENTS.md` del repositorio indica la carpeta del proyecto en CEREBRO; el traspaso se escribe siempre en CEREBRO, no en el repositorio.

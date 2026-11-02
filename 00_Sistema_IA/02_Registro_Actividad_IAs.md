@@ -64,3 +64,15 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** completados `00_Resumen.md` (estado v79, repo, arquitectura), `Backlog.md` y `Decisiones.md` de `03_Proyectos/02_Intendencia`. Sin secretos escritos.
 - **Estado:** nota de Intendencia al día con v79.
 - **Siguiente:** revisar el Supabase real (segunda cuenta) y arreglar 5 tests dependientes de la fecha.
+
+
+## 2026-11-02 14:03 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** archivos de arranque (AGENTS/GEMINI/CLAUDE.md) en raíz de la bóveda, 00_Estado_Actual.md, protocolo de traspaso en instrucciones generales, clonados 3 repositorios en C:\dev (combat-warrior-hub, asesor-financiero, Estrato) con AGENTS/GEMINI/CLAUDE.md y commit local en cada uno, y actualizadas las notas de proyecto en CEREBRO.
+- **Estado:** traspaso entre IAs operativo.
+- **Siguiente:** el usuario rellena 00_Estado_Actual.md en la revisión semanal.
+
+
+## 2026-11-02 14:10 — Claude (Opus 5.5) — estrato
+- **Hecho:** traspaso de las sesiones del 29 al 31 de octubre. Completados `03_Proyectos/04_Estrato/00_Resumen.md` (funcionalidades, estado, compilación), `Backlog.md` y `Decisiones.md` (6 decisiones). Código subido a `abri50/Estrato` (rama `main`, 3 commits: v0.1.0, licencia, logo).
+- **Estado:** v0.1.0 instalada y arrancando en el PC del usuario, con PrusaSlicer 2.9.6 incluido. Release de GitHub sin publicar.
+- **Siguiente:** publicar Release v0.1.0 con los dos `.exe`, probar impresión real en la Ender 3 SE y subir el commit local de AGENTS/GEMINI/CLAUDE.md desde `C:\dev\Estrato`.

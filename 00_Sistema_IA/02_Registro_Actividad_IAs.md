@@ -88,3 +88,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** creado `00_Sistema_IA/06_Enrutado_IAs.md` (criterio de coste y derivación entre Claude, Antigravity, Gemini, NotebookLM y Usuario) y añadido como paso 3 en la secuencia de lectura de `AGENTS.md`.
 - **Estado:** enrutado de tareas documentado y enlazado en el arranque de agentes.
 - **Siguiente:** —
+
+
+## 2026-11-02 15:06 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** añadido `area: "sistema"` al frontmatter de `00_Sistema_IA/01_Instrucciones_Generales.md`.
+- **Estado:** frontmatter alineado con el esquema del sistema.
+- **Siguiente:** —

@@ -1,5 +1,6 @@
 ---
 tipo: core_prompt
+area: "sistema"
 proyecto: ""
 estado: activo
 fecha: 2026-11-02

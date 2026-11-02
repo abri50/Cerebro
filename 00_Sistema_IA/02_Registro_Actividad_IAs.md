@@ -168,5 +168,12 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 18:03 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** rebranding definitivo del HUD a **CEREBRO // CORE** eliminando cualquier referencia a Ultron/JARVIS en `server.js`, `index.html` y `app.js`. Migrada la paleta hacia una estética sináptica/neuronal (fondo `#0f051d`, magenta `#e11d48`, carmesí `#be123c`, púrpura `#9333ea`, rosa táctico `#f43f5e`). Orbe en Canvas 2D actualizado con gradientes sinápticos, vórtices de plasma violeta/magenta y estado `isProcessing` que acelera la rotación e intensifica el halo durante la ejecución de directivas. Consola 100% conectada a la API local (`status`, `resumen`, `yaml`, `reindex`, `ping`, `buscar <q>` con ponderación por etiquetas y contenido, `clear`). Servidor reiniciado y probado.
+- **Estado:** CEREBRO // CORE totalmente interactivo y operativo en `http://127.0.0.1:3000`.
+- **Siguiente:** —
+
+
+
 
 

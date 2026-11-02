@@ -162,4 +162,11 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 17:34 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** corregido problema crítico de renderizado del núcleo central migrando a Canvas 2D nativo sin dependencias externas (`core-canvas`). Fijadas dimensiones explícitas en el contenedor (`w-80 h-80 sm:w-96 sm:h-96`) con canvas absoluto `400x400` y capas de texto superpuestas con `pointer-events-none`. Implementado renderizado volumétrico de plasma solar con gradientes radiales complejos (centro blanco `#ffffff`, halo naranja `#f97316` y borde carmesí `#dc2626`), turbulencia interna orgánica, anillos orbitales 3D inclinados con ticks balísticos, chispas solares radiantes y control completo de ratón (`mousemove`, `mouseenter`, `mouseleave`) con paralaje sutil y expansión dinámica de halo y aceleración en hover.
+- **Estado:** núcleo de plasma 3D nativo completamente operativo y visible en `http://127.0.0.1:3000`.
+- **Siguiente:** —
+
+
+
 

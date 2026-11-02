@@ -124,3 +124,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** desarrollada la interfaz visual HUD táctico (`public/index.html` y `public/app.js`). Configurado `express.static('public')` en `server.js`. Interfaz oscura industrial con Tailwind CDN, Chart.js, indicadores de estado reactivos (polling cada 10s), grid con los 4 paneles principales (Acondicionamiento físico, Grado Informática UI1, Portfolio de proyectos y Bitácora de estudio) y manejo de desconexión. Verificado acceso HTTP en `127.0.0.1:3000`.
 - **Estado:** HUD operativo y listo para uso en el navegador.
 - **Siguiente:** —
+
+
+## 2026-11-02 16:22 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** implementado el endpoint `POST /api/ejecutar-accion` en `server.js` con arquitectura modular (`actions.js` y `audit.js`). Añadidos comandos seguros locales: `ping_sistema` (telemetría de hardware y uptime), `chequear_yaml` (auditoría de frontmatter) y `forzar_reindex` (rescan de chokidar). Configurado log de auditoría persistente en `logs/audit.log` con IP 127.0.0.1, timestamp y estado. Validación de acciones con HTTP 400 y protección contra escrituras HTTP 405.
+- **Estado:** backend operativo con funciones de ejecución segura y auditoría en `127.0.0.1:3000`.
+- **Siguiente:** —

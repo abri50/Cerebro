@@ -112,3 +112,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** inicializado el proyecto `C:\dev\cerebro-dashboard\` con Node.js, `gray-matter` y `chokidar`. Creados `indexer.js` (watcher y parseador de metadatos YAML de la bóveda CEREBRO) y `server.js` (servidor HTTP en 127.0.0.1:3000 con endpoints REST). Añadidos archivos de arranque (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `.gitignore`), verificado test de escaneo inicial (73 notas indexadas) y commit local inicial en git.
 - **Estado:** backend base listo y funcional en disco, sin frontend todavía.
 - **Siguiente:** desarrollar la interfaz web/dashboard (HTML/Tailwind o framework ligero).
+
+
+## 2026-11-02 15:40 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** refactorizado el backend de `C:\dev\cerebro-dashboard\` a arquitectura Express modular (`config.js`, `indexer.js`, `server.js`). Añadidos endpoints REST de solo lectura (`/api/status` y `/api/resumen` agrupando por tipo), middleware de bloqueo estricto de escrituras (405 Method Not Allowed en POST/PUT/DELETE) y configurado CORS local. Verificados tests con 73 notas indexadas.
+- **Estado:** backend Express operativo en 127.0.0.1:3000 y protegido contra escrituras.
+- **Siguiente:** desarrollar la capa de frontend visual.

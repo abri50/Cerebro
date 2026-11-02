@@ -106,3 +106,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** configurada la regla de usuario de enrutado y procesamiento de cola (`AGENTS.md` y `05_Cola_Antigravity.md`) a nivel global (`~/.gemini/config/rules/`, `~/.gemini/config/GEMINI.md`, `C:\Users\aam12\GEMINI.md`), en el entorno de desarrollo (`C:\dev\GEMINI.md`) y en la bóveda (`CEREBRO/GEMINI.md`).
 - **Estado:** regla permanente y activa tanto dentro de la bóveda como en cualquier proyecto o sesión externa de Antigravity.
 - **Siguiente:** —
+
+
+## 2026-11-02 15:35 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** inicializado el proyecto `C:\dev\cerebro-dashboard\` con Node.js, `gray-matter` y `chokidar`. Creados `indexer.js` (watcher y parseador de metadatos YAML de la bóveda CEREBRO) y `server.js` (servidor HTTP en 127.0.0.1:3000 con endpoints REST). Añadidos archivos de arranque (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `.gitignore`), verificado test de escaneo inicial (73 notas indexadas) y commit local inicial en git.
+- **Estado:** backend base listo y funcional en disco, sin frontend todavía.
+- **Siguiente:** desarrollar la interfaz web/dashboard (HTML/Tailwind o framework ligero).

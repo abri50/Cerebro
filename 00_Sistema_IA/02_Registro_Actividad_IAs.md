@@ -94,3 +94,9 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** añadido `area: "sistema"` al frontmatter de `00_Sistema_IA/01_Instrucciones_Generales.md`.
 - **Estado:** frontmatter alineado con el esquema del sistema.
 - **Siguiente:** —
+
+
+## 2026-11-02 15:14 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** creado `00_Sistema_IA/05_Cola_Antigravity.md` (cola de trabajo para derivación entre IAs con formato T-AAAAMMDD-NN) y añadida la sección `## Cola de tareas` a `AGENTS.md`.
+- **Estado:** cola de tareas operativa y documentada para ejecución de órdenes mecánicas.
+- **Siguiente:** —

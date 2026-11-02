@@ -174,6 +174,13 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
+## 2026-11-02 18:20 — Antigravity (Gemini 3.8 Flash) — cerebro-dashboard
+- **Hecho:** implementada la arquitectura backend desacoplada para la futura integración de voz y React en `C:\dev\cerebro-dashboard\`. Creado `eventBus.js` (emisor central de eventos con soporte nativo de streaming SSE, heartbeat cada 15s y registro de clientes), `orchestrator.js` (orquestador de decisiones y capa de abstracción LLM compatible con herramientas locales y proveedores externos como Ollama con contrato estructurado), y `audioRouter.js` (módulo de preparación de audio y voz con endpoints `GET /api/voice/status` y `POST /api/voice/process` para pipelines STT/TTS). Conectados en `server.js` los endpoints `GET /api/stream` y `POST /api/orchestrate`, límite de payload ampliado a 15MB para audio base64, y eventos del indexador (`system_state`, `note_event`) vinculados al bus reactivo.
+- **Estado:** servicios de streaming SSE, orquestación LLM y pipeline de voz activos y verificados en `http://127.0.0.1:3000`.
+- **Siguiente:** —
+
+
+
 
 
 

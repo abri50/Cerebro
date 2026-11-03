@@ -44,6 +44,8 @@ tags: [sistema, moc, indice]
 - [[03_Proyectos/07_Home_Server/00_Resumen|07_Home_Server]]: Servidor local doméstico de almacenamiento en red y streaming multimedia.
 - [[03_Proyectos/08_Visor_PVS420/00_Resumen|08_Visor_PVS420]]: Monocular térmico DIY para airsoft con carcasa impresa en 3D.
 - [[03_Proyectos/09_Gestor_Vinted/00_Resumen|09_Gestor_Vinted]]: Herramienta web para automatización y gestión de ventas en Vinted.
+- [[03_Proyectos/10_Cerebro/00_Resumen|10_Cerebro]]: Memoria compartida y sistema operativo de IA para CEREBRO.
+- [[03_Proyectos/11_Cerebro_Voz/00_Resumen|11_Cerebro_Voz]]: Asistente de voz local autónomo con Whisper y Piper TTS.
 
 ## 04 Recursos
 

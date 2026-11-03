@@ -11,3 +11,9 @@ Toda nota que generes cumple la sección "Notas generadas por IA" de 00_Sistema_
 ## Cola de tareas
 - Si el usuario dice "ejecuta la cola": procesa en orden las tareas de 00_Sistema_IA/05_Cola_Antigravity.md (sección Pendientes). Por cada una: ejecuta, verifica el criterio de hecho, muévela a Hechas con el resultado y añade su entrada al registro de actividad. Si una tarea es ambigua o requiere una decisión, déjala en Pendientes con una línea "Bloqueada: <motivo>" y continúa con la siguiente.
 - Claude no ejecuta trabajo mecánico (archivos, formato, código ya especificado, instalaciones, git): lo añade a la cola con una orden completa y verificable.
+
+## Mantenimiento
+- Si el usuario dice "ejecuta mantenimiento": sigue 00_Sistema_IA/Prompts/Mantenimiento_Semanal.md.
+
+## Inbox
+- Si el usuario dice "procesa inbox": sigue 00_Sistema_IA/Prompts/Procesar_Inbox.md.

@@ -3,15 +3,17 @@
   "command_timeout": 5,
   "templates_folder": "00_Sistema_IA/Plantillas",
   "templates_pairs": [],
+  "trigger_on_file_creation": true,
   "trigger_on_file_creation_mode": "folder",
+  "enable_folder_templates": true,
   "auto_jump_to_cursor": false,
   "jump_to_cursor_after_file_name": false,
   "shell_path": "",
   "user_scripts_folder": "",
   "folder_templates": [
     {
-      "folder": "/",
-      "template": "00_Sistema_IA/Plantillas/Plantilla_Base.md"
+      "folder": "01_Ejercito/04_Preparacion_Fisica",
+      "template": "00_Sistema_IA/Plantillas/Plantilla_Entrenamiento.md"
     },
     {
       "folder": "01_Ejercito",
@@ -23,7 +25,11 @@
     },
     {
       "folder": "03_Proyectos",
-      "template": "00_Sistema_IA/Plantillas/Plantilla_Proyectos.md"
+      "template": "00_Sistema_IA/Plantillas/Plantilla_Base.md"
+    },
+    {
+      "folder": "04_Recursos",
+      "template": "00_Sistema_IA/Plantillas/Plantilla_Base.md"
     }
   ],
   "file_templates": [],

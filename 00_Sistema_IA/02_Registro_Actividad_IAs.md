@@ -217,3 +217,24 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Tareas verificadas y movidas a `## Hechas` en la cola.
 - **Estado:** cola vacía (0 pendientes, 2 hechas). Bóveda al día.
 - **Siguiente:** —
+
+## 2026-11-03 22:10 — Claude (Opus 5.5) — cerebro
+- **Hecho:** creado `03_Proyectos/10_Cerebro/` (00_Resumen, Decisiones con 12 decisiones de la sesión de diseño 02-03/11, Backlog). Añadidas a la cola T-20261103-03 (mantenimiento), -04 (plantillas por carpeta) y -05 (partir guía POO, bloqueada hasta que el usuario pegue la guía). Skill `cerebro` guardada en Claude.
+- **Estado:** CEREBRO documentado como proyecto propio; tareas mecánicas en cola.
+- **Siguiente:** Antigravity: ejecuta la cola. Usuario: Obsidian Git, 00_Estado_Actual, pegar guía POO.
+
+## 2026-11-03 22:45 — Claude (Opus 5.5) — cerebro_voz
+- **Hecho:** creado `03_Proyectos/11_Cerebro_Voz/` (resumen, 5 decisiones, backlog). Especificada la fase 1 en la cola como T-20261103-07 (depende de T-06, inbox).
+- **Estado:** diseño cerrado; fase 1 sin LLM ni red, voz original con Piper.
+- **Siguiente:** Antigravity: ejecuta la cola (modelo Pro para T-07). Usuario: elegir variante de voz.
+
+
+## 2026-11-03 23:15 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** ejecutadas las tareas mecánicas pendientes de la cola (`00_Sistema_IA/05_Cola_Antigravity.md`):
+  - **T-20261103-03 (Mantenimiento semanal):** creado `00_Sistema_IA/Prompts/Mantenimiento_Semanal.md` con rutina de 7 pasos, actualizada sección `## Mantenimiento` en `AGENTS.md`, actualizados enlaces a proyectos 10 y 11 en `00_Sistema_IA/03_Indice_General.md` y ejecutada primera revisión en `00_Sistema_IA/Revisiones/2026-W45.md`.
+  - **T-20261103-04 (Plantillas automáticas Templater):** creado backup `.obsidian/plugins/templater-obsidian/data.json.bak` y configuradas las 5 rutas de `folder_templates` en `data.json` con validación formal de JSON.
+  - **T-20261103-06 (Bandeja de entrada Inbox):** creado `00_Sistema_IA/00_Inbox.md`, prompt de clasificación `00_Sistema_IA/Prompts/Procesar_Inbox.md`, sección `## Inbox` en `AGENTS.md` y añadido Paso 0 en `00_Sistema_IA/Prompts/Mantenimiento_Semanal.md`.
+  - **T-20261103-05 (Guía POO):** dejada como bloqueada en pendientes a la espera de que el usuario pegue `_Guia_NotebookLM.md`.
+  - Movidas T-03, T-04 y T-06 a `## Hechas` en la cola.
+- **Estado:** tareas mecánicas resueltas; cola con T-05 (bloqueada) y T-07, T-08, T-09 (pendientes, sugeridas para modelo Pro).
+- **Siguiente:** el usuario debe pegar `_Guia_NotebookLM.md` para desbloquear T-05, o iniciar T-07 (Cerebro Voz fase 1).

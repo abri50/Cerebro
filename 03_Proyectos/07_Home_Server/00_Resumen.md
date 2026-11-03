@@ -1,13 +1,16 @@
 ---
-tipo: "proyecto"
-area: "desarrollo"
+tipo: proyecto
+area: desarrollo
 fecha: 2026-11-02
-estado: "activo"
+estado: activo
 proyecto: home_server
-siguiente_accion: ""
+siguiente_accion: Decidir hardware cuando Cerebro fases 1-2 estén operativas
+  (ThinkCentre no confirmado)
 prioridad: 2
 stack: []
-tags: ["codigo", "proyecto"]
+tags:
+  - codigo
+  - proyecto
 ---
 
 # Home Server

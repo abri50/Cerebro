@@ -238,3 +238,30 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Movidas T-03, T-04 y T-06 a `## Hechas` en la cola.
 - **Estado:** tareas mecánicas resueltas; cola con T-05 (bloqueada) y T-07, T-08, T-09 (pendientes, sugeridas para modelo Pro).
 - **Siguiente:** el usuario debe pegar `_Guia_NotebookLM.md` para desbloquear T-05, o iniciar T-07 (Cerebro Voz fase 1).
+
+## 2026-11-03 23:50 — Claude (Opus 5.5) — montaje
+- **Hecho:** creado `03_Proyectos/12_Montaje/` (resumen, 5 decisiones, backlog): editor de vídeo propio tipo CapCut, enfoque en sala limpia. Especificada la F1 (motor de subtítulos CLI con whisper.cpp Vulkan + ASS + FFmpeg) como T-20261103-12.
+- **Estado:** arquitectura cerrada; sin código.
+- **Siguiente:** Antigravity: ejecuta la cola (Pro para T-12). Usuario: clip de prueba en `C:\dev\montaje\muestras\prueba.mp4`, nombre y licencia.
+
+## 2026-11-03 23:55 — Claude (Opus 5.5) — montaje
+- **Hecho:** reenfocado Montaje como app propia de uso personal (D01 reescrita) y añadido el export 4K TikTok (D06). Ampliada T-20261103-12 con `render.js`, presets `tiktok-4k`/`yt-4k`/`borrador` y subtítulos rasterizados a 4K.
+- **Estado:** especificación de F1 cerrada; sin código.
+- **Siguiente:** Antigravity: ejecuta la cola (Pro para T-12). Usuario: clip de prueba y nombre de la app.
+
+
+## 2026-11-03 23:55 — Antigravity (Gemini 3.8 Flash) — cerebro_voz
+- **Hecho:** ejecutada y verificada la tarea `T-20261103-07` (Cerebro Voz, fase 1) en `C:\dev\cerebro-voz`:
+  - Creado repositorio git e inicializado `.gitignore` ignorando `.venv/`, `models/`, `logs/`, `*.wav`.
+  - Configurado entorno Python 3.13 con `faster-whisper` (small int8 en CPU), `piper-tts` (voz española masculina `es_ES-davefx-medium`), `sounddevice`, `numpy`, `pynput` y `pytest`.
+  - Implementado `audio_fx.py` con modificación tonal de pitch (-2.5 semitonos), remuestreo y WSOLA para preservación de tempo, reverb de reflejos tempranos y normalización.
+  - Implementado `router.py` con normalización de caracteres/tildes y 5 reglas operativas (anota/apunta/guarda, registra, estado/que toca/informe, siguiente acción por proyecto aproximado, recuento de cola y fallback seguro a bandeja).
+  - Implementado `audio_capture.py` con detección de energía y silencio (1.2 s) y captura bloqueante o de streaming.
+  - Generadas las 3 muestras de voz en `muestras/` (`variante_1.wav`, `variante_2.wav`, `variante_3.wav`) sobre «Cerebro operativo. Todo en orden.».
+  - Verificada la suite `pytest` (3/3 pruebas superadas: `test_no_network_imports`, `test_normalize_text`, `test_router_10_phrases`).
+  - Pruebas reales validadas: «anota prueba de voz» escribe en `00_Inbox.md` y «estado» lee la telemetría de `00_Estado_Actual.md`.
+  - Creados `README.md`, `requirements.txt`, `config.toml`, `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`.
+  - Commit local inicial completado (`b835f62`).
+  - Actualizado `03_Proyectos/11_Cerebro_Voz/00_Resumen.md` y `Backlog.md`. Movida `T-07` a `## Hechas` en la cola.
+- **Estado:** núcleo local de voz completamente operativo y probado.
+- **Siguiente:** usuario debe probar las 3 muestras de audio en `C:\dev\cerebro-voz\muestras\` y autorizar T-08 (Modo conversación en HUD).

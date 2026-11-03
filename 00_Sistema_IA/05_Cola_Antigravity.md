@@ -28,29 +28,6 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Modelo sugerido:** flash
 - **Estado:** Bloqueada: a la espera de que el usuario pegue la guía de NotebookLM en `02_Estudios/01_Grado_Ingenieria_Informatica/Asignaturas/01_Curso_1/T1_Trimestre_1/01_Diseno_Programacion_Orientada_Objetos/Apuntes/_Guia_NotebookLM.md`.
 
-##### T-20261103-07 — Cerebro Voz, fase 1 (núcleo local)
-- **Proyecto:** cerebro_voz
-- **Orden:** lee `03_Proyectos/11_Cerebro_Voz/00_Resumen.md` y `Decisiones.md`. Implementa en `C:\dev\cerebro-voz` (git init; `.gitignore` con `.venv/`, `models/`, `logs/`, `*.wav`):
-  1. Entorno: Python 3.11+ con venv; dependencias `faster-whisper`, `sounddevice`, `numpy`, `keyboard` (o `pynput`), `piper-tts`, `pyyaml`, `pytest`. Descarga el modelo Whisper `small` y una voz Piper española masculina en `models/`.
-  2. `config.toml`: `vault_path = "C:\\Users\\aam12\\Documents\\CEREBRO"`, `hotkey = "ctrl+alt+c"`, parámetros de voz (`pitch_semitones`, `speed`, `effect`).
-  3. Bucle: atajo pulsado → graba hasta 1,2 s de silencio (máx. 20 s) → transcribe en `es` → `router.py` → acción → respuesta con TTS. Un solo mensaje a la vez.
-  4. `router.py` con reglas por regex sobre el texto normalizado (minúsculas, sin tildes):
-     - `^(anota|apunta|guarda) (.+)` → añade `- AAAA-MM-DD HH:MM — <texto>` bajo `## Entradas` de `00_Sistema_IA/00_Inbox.md`. Responde «Anotado».
-     - `^registra (.+)` → igual que anota (lo archiva "procesa inbox"). Responde «Registrado en la bandeja».
-     - `(estado|que toca|informe)` → lee `00_Sistema_IA/00_Estado_Actual.md`, quita frontmatter, marcas Markdown y callouts, y lo lee (máx. 60 s de audio).
-     - `(siguiente|donde lo dejamos).*(de|con|en) (\w+)` → busca en `03_Proyectos/*/00_Resumen.md` el `proyecto` que coincida (aproximado) y lee su `siguiente_accion`.
-     - `(cola|tareas pendientes)` → cuenta las `###` bajo `## Pendientes` de `05_Cola_Antigravity.md` y lee sus títulos.
-     - Sin coincidencia → «Esa orden aún no la conozco; la dejo en la bandeja» y la anota con prefijo `¿?`.
-  5. Voz: Piper → posprocesado con numpy (tono más grave según `pitch_semitones`, leve reverb). Genera `muestras/variante_{1,2,3}.wav` con 3 ajustes distintos de la frase «Cerebro operativo. Todo en orden.» para que el usuario elija.
-  6. Escritura segura en la bóveda: añadir con apertura en modo append, UTF-8, sin reescribir archivos; si `00_Inbox.md` no existe, avisa por voz y no lo crees.
-  7. Fase 1 sin red: añade un test que falle si el código importa `requests`, `httpx` o `urllib.request`.
-  8. Tests `pytest` del router con al menos 10 frases (incluidas con tildes y mayúsculas).
-  9. `README.md`: instalación, uso, atajo, cómo cambiar la voz.
-  10. Crea en el repo `AGENTS.md`, `GEMINI.md` y `CLAUDE.md` enlazados a `CEREBRO/03_Proyectos/11_Cerebro_Voz/` según el protocolo de traspaso.
-  11. Actualiza `Backlog.md` y `siguiente_accion` del proyecto y registra la actividad.
-- **Criterio de hecho:** `pytest` en verde; con el atajo, «anota prueba de voz» añade la línea al inbox y «estado» lee `00_Estado_Actual` en voz alta; existen las 3 muestras de voz; commit local hecho (sin push).
-- **Modelo sugerido:** pro
-
 ##### T-20261103-08 — Modo conversación en la interfaz CEREBRO // CORE (127.0.0.1:3000)
 - **Proyecto:** cerebro_voz
 - **Depende de:** T-20261103-07. **Ampliación de T-07:** además del atajo de teclado, el núcleo Python expone un servicio HTTP solo en `127.0.0.1:3001`: `POST /voz/turno` (audio webm/wav → `{texto_usuario, respuesta, accion}` + audio de respuesta en wav), `GET /voz/estado`. Misma lógica del router; sin red externa.
@@ -74,6 +51,61 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Orden:** implementa en la interfaz `127.0.0.1:3000` la especificación completa de `03_Proyectos/10_Cerebro/HUD_Diseno.md` (layout de 3 columnas, sistema visual, núcleo con shader y estados, partículas = tareas pendientes, color = salud global, endpoints `/api/estado`, `/api/cola`, `/api/registro`, `/api/proyectos`, `/api/salud` con SSE, movimiento y `prefers-reduced-motion`). Elimina cualquier métrica sin fuente real. Fuentes y Three.js en copia local. Commit por cada bloque (layout, visual, núcleo, datos). Sin push.
 - **Criterio de hecho:** cada número visible sale de un endpoint; la esfera cambia de color al detener el servicio de voz; las partículas coinciden con las tareas de la cola; 60 fps estables con la pestaña visible; con `prefers-reduced-motion` no hay animación. Captura de pantalla adjunta en el registro.
 - **Modelo sugerido:** pro
+
+##### T-20261103-11 — Cerebro Voz, fase 2: conversación libre (LLM)
+- **Proyecto:** cerebro_voz
+- **Depende de:** T-07, T-08, T-10. **BLOQUEADA** hasta que el usuario confirme que la variable de entorno `GEMINI_API_KEY` existe (clave del nivel de pago).
+- **Orden:**
+  1. `llm.py` con el SDK oficial `google-genai`. Modelo configurable en `config.toml` (`llm_model`, por defecto el Gemini Flash vigente; consulta el nombre actual en la documentación oficial, no lo inventes). La clave solo desde la variable de entorno; nunca en archivos ni en la bóveda.
+  2. *System prompt* = contenido de `00_Sistema_IA/07_Identidad_Cerebro.md` + «Responde en español, de usted, en un máximo de 3 frases salvo que se pida detalle. No inventes datos: si no está en el contexto o en una herramienta, dilo».
+  3. Contexto por turno: `00_Estado_Actual.md` (sin frontmatter) + el `00_Resumen.md` del proyecto si el usuario nombra uno + los últimos 10 turnos (en RAM).
+  4. Herramientas (*function calling*): `leer_nota(ruta)` (solo dentro de la bóveda, excluye `.obsidian`), `buscar_proyecto(nombre)`, `anotar(texto)` → bandeja, `tareas_cola()`, `proponer_tarea(titulo, orden, criterio)` → **pide confirmación por voz** («¿La añado a la cola, señor?») y solo escribe tras un «sí».
+  5. Router: reglas primero (fase 1 + identidad); si nada encaja → LLM. Si falta la clave, se agota el límite diario o hay un error de red → respuesta de fallback de la identidad y sigue funcionando por reglas (nunca un callejón sin salida; el error no entra en la memoria de turnos).
+  6. Streaming: divide la respuesta en frases y manda cada frase a Piper en cuanto llega, para que empiece a hablar antes de terminar.
+  7. Chat por texto: en el terminal del HUD, cualquier texto que no sea un comando del HUD va al mismo `POST /voz/turno` (versión texto) y la respuesta aparece y se oye.
+  8. Límites: `max_llm_llamadas_dia` en la configuración (por defecto 200); contador diario en `logs/uso_llm.json` expuesto en `/voz/estado` y en `/api/salud` del HUD (llamadas hoy / límite).
+  9. Tests con el LLM simulado (*mock*): fallback sin clave, límite diario alcanzado, herramienta fuera de la bóveda rechazada, `proponer_tarea` no escribe sin confirmación.
+  10. Actualiza `00_Resumen` (fase 2), Backlog, Decisiones y el registro.
+- **Criterio de hecho:** «¿Qué me recomiendas estudiar hoy?» obtiene una respuesta coherente con `00_Estado_Actual`, con la voz de Cerebro y empezando a hablar en menos de 3 s; sin clave, Cerebro sigue respondiendo por reglas; tests en verde.
+- **Modelo sugerido:** pro
+
+- **Ampliación (2026-11-03, prevalece sobre lo anterior):** el LLM es **intercambiable** mediante `llm_provider` en `config.toml`: `ollama` (por defecto) o `gemini`.
+  - `ollama`: API local `http://127.0.0.1:11434` (URL configurable para usar la GPU del PC desde el futuro servidor). Modelo configurable (`ollama_model`); prueba un modelo instruct de 7-14B cuantizado con buen español y deja en el README una tabla con latencia y calidad de 3 candidatos medidos con las mismas 10 preguntas.
+  - `gemini`: como se describe arriba (clave de pago en variable de entorno).
+  - Cascada: reglas → `ollama` → `gemini` (solo si hay clave y el usuario lo activa con `llm_fallback = "gemini"`) → fallback de la identidad.
+  - Ya **no está bloqueada**: con Ollama se puede hacer sin clave. La parte de Gemini se prueba solo si `GEMINI_API_KEY` existe.
+  - Paso previo del usuario: instalar Ollama para Windows y comprobar con `ollama ps` que el modelo se carga en la GPU (RX 6900 XT, 16 GB) y no en la CPU.
+
+##### T-20261103-12 — Montaje F1: motor de subtítulos automáticos (CLI)
+- **Proyecto:** montaje
+- **Orden:** lee `03_Proyectos/12_Montaje/00_Resumen.md` y `Decisiones.md`. Implementa en `C:\dev\montaje` (git init; `.gitignore` con `node_modules/`, `models/`, `bin/`, `out/`, `muestras/`):
+  1. Node.js 20+ ESM, sin frameworks. Dependencias permitidas: ninguna en runtime salvo un parser de argumentos mínimo; `node:test` para tests.
+  2. Binarios en `bin/` (no versionados) con `scripts/setup.ps1` que los descargue: `whisper-cli.exe` de la última release oficial de `ggml-org/whisper.cpp` **con Vulkan**, `ffmpeg.exe`/`ffprobe.exe` (build con libass). Modelos en `models/`: `ggml-large-v3-turbo-q5_0.bin` y el VAD Silero (`ggml-silero-*.bin`) desde los repos oficiales. Comprueba los flags reales con `whisper-cli --help`; no los inventes.
+  3. CLI: `node src/cli.js subs <video> [--estilo cw-impacto] [--formato auto|9:16|16:9] [--palabras 3] [--mayusculas] [--quemar] [--hw amf|cpu]`. Salida en `out/<nombre>/`: `<nombre>.montaje.json`, `.srt`, `.ass` y, con `--quemar`, `<nombre>_subs.mp4`.
+  4. Pipeline en módulos puros (`src/core/`):
+     - `audio.js`: FFmpeg → WAV 16 kHz mono.
+     - `transcribe.js`: `whisper-cli -l es -ojf --dtw large.v3.turbo` + VAD + `--prompt` con los términos de `glosario.json` (clave `prompt`). Si la GPU falla, reintenta con `-ng` y avísalo.
+     - `words.js`: tokens del JSON completo → palabras `{texto, ini_ms, fin_ms, conf}` (token con espacio inicial abre palabra; la puntuación se pega a la anterior; descarta tokens especiales `[_...]`); aplica `glosario.json` (clave `correcciones`, sustitución por palabra/frase, sin distinguir mayúsculas). Garantiza tiempos monótonos.
+     - `segment.js`: agrupa en bloques: máx. `--palabras` (por defecto 3 en 9:16 y 7 en 16:9), máx. 2 líneas, corta en pausa > 300 ms o en `.?!,`; duración mínima 600 ms; sin solapes.
+     - `export-srt.js`, `export-ass.js`, `project.js` (JSON propio, versión `1`).
+  5. Estilo `cw-impacto` (`styles/cw-impacto.json`): fuente gruesa OFL incluida en `fonts/` (Montserrat Black o Anton), texto blanco, borde negro grueso, sombra suave; **palabra activa** con el color principal de la marca (extráelo de `C:\dev\combat-warrior-hub`, configuración de Tailwind/CSS; si no hay, `#FFD400`) y efecto pop `\fscx115\fscy115` → 100 % en 120 ms con `\t`. Un evento `Dialogue` por cada intervalo de palabra activa con el bloque completo. `PlayResX/Y` = resolución del vídeo (ffprobe); en 9:16 el texto centrado al ~65 % de la altura (fuera de la interfaz de Reels/TikTok); en 16:9, tercio inferior.
+  6. Quemado: `ffmpeg -vf "ass=<ass>:fontsdir=fonts" -c:a copy`; `--hw amf` → `h264_amf`, si no `libx264 -crf 18 -preset veryfast`.
+  7. `glosario.json` inicial: prompt «CombatWarrior, Tactical Barbell, Tactical Games, rucking, sandbag, kettlebell, Operator, Fighter, Base Building»; correcciones de ejemplo (`"combat warrior"→"CombatWarrior"`, `"tactical barbel"→"Tactical Barbell"`, `"raking"→"rucking"`).
+  8. Tests `node:test` con fixtures JSON de whisper (sin ejecutar whisper): unión de tokens con acentos y puntuación, glosario, segmentación (límites, pausas, mín. 600 ms), formato de tiempo SRT `00:00:01,234` y ASS `0:00:01.23`, un evento ASS por palabra.
+  9. `README.md` (setup, uso, estilos, glosario), `LICENSE` PolyForm Noncommercial 1.0.0 con «Copyright © 2026 Abraham Almagro Martínez» (el usuario puede cambiarla), y `AGENTS.md`, `GEMINI.md`, `CLAUDE.md` enlazados a `CEREBRO/03_Proyectos/12_Montaje/`.
+  10. Si existe `muestras/prueba.mp4`, ejecuta `subs muestras/prueba.mp4 --quemar` y anota en el registro el tiempo de transcripción y si usó GPU. Si no existe, déjalo indicado.
+  11. Actualiza `Backlog.md`, `siguiente_accion` y el registro. Commit local, sin push.
+- **Criterio de hecho:** `node --test` en verde; con el clip de prueba se generan los 4 archivos, el `.mp4` muestra bloques de ≤3 palabras con la palabra activa resaltada y sincronizada (desfase visual < 150 ms), y «Tactical Barbell»/«CombatWarrior» salen bien escritos; `whisper-cli` informa de Vulkan como dispositivo.
+- **Modelo sugerido:** pro
+
+- **Ampliación (2026-11-03, prevalece sobre lo anterior): export 4K TikTok.** Lee `Decisiones.md` D06.
+  - Nuevo comando `node src/cli.js render <video> [--subs <ass>] [--preset tiktok-4k|yt-4k|borrador] [--codec h264|hevc]` y `subs ... --quemar` usa por defecto `--preset tiktok-4k`.
+  - `src/core/render.js` + `presets/*.json`. `tiktok-4k`: 2160×3840, fps de origen (máx. 60), `h264_amf` (`-quality quality -rc vbr_peak -b:v 60M -maxrate 80M`; comprueba los flags reales con `ffmpeg -h encoder=h264_amf`), `-pix_fmt yuv420p`, `-c:a aac -b:a 320k -ar 48000`, `-movflags +faststart`. `yt-4k`: 3840×2160. `borrador`: 1080p, `libx264 -preset veryfast -crf 23` para revisar rápido. Sin AMF disponible → `libx264 -preset slow -crf 16` y avísalo.
+  - Origen 16:9 en preset vertical: escala + recorte centrado (`scale` con `force_original_aspect_ratio=increase`, `crop`), sin bandas negras.
+  - Orden del filtro: `scale=...:flags=lanczos` → `crop` → `ass=...` (los subtítulos se rasterizan a 4K). El `.ass` se genera siempre con `PlayResX/Y` del preset de salida, no del vídeo de origen; tamaños de fuente, bordes y márgenes escalados en proporción.
+  - Barra de progreso en consola leyendo `-progress pipe:1`.
+  - Tests: cadena de filtros y argumentos generados para cada preset (sin ejecutar ffmpeg) y `PlayRes` = resolución del preset.
+  - **Criterio de hecho añadido:** `ffprobe` del archivo final da 2160×3840, `yuv420p`, H.264 y audio AAC 48 kHz; los subtítulos se ven nítidos con zoom al 100 % sobre un fotograma 4K exportado con `ffmpeg -ss 5 -frames:v 1`.
 
 ## Hechas
 ##### T-20261103-01 — Reglas de memoria (lecciones JARVIS)
@@ -132,3 +164,10 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Criterio de hecho:** existen las dos notas, `AGENTS.md` tiene la sección y una prueba con 3 líneas de ejemplo se archiva correctamente.
 - **Modelo sugerido:** flash
 - **Resultado:** Completado el 2026-11-03. Creado `00_Sistema_IA/00_Inbox.md`, creado `00_Sistema_IA/Prompts/Procesar_Inbox.md`, actualizada la regla en `AGENTS.md` y añadido el Paso 0 en `00_Sistema_IA/Prompts/Mantenimiento_Semanal.md`.
+
+##### T-20261103-07 — Cerebro Voz, fase 1 (núcleo local)
+- **Proyecto:** cerebro_voz
+- **Orden:** lee `03_Proyectos/11_Cerebro_Voz/00_Resumen.md` y `Decisiones.md`. Implementa en `C:\dev\cerebro-voz` (git init; `.gitignore` con `.venv/`, `models/`, `logs/`, `*.wav`).
+- **Criterio de hecho:** `pytest` en verde; con el atajo, «anota prueba de voz» añade la línea al inbox y «estado» lee `00_Estado_Actual` en voz alta; existen las 3 muestras de voz; commit local hecho (sin push).
+- **Modelo sugerido:** pro
+- **Resultado:** Completado el 2026-11-03. Inicializado `C:\dev\cerebro-voz` con Python 3.13 en venv, faster-whisper (small) y Piper TTS (es_ES-davefx-medium) en local. Implementados `audio_fx.py` (WSOLA + reverb sintético), `router.py`, `audio_capture.py`, `stt.py`, `tts.py`, `main.py` y `config.toml`. Suite pytest en verde (3/3 pasando: aislamiento sin red, normalización y 13 casos de enrutado). Generadas 3 muestras de voz en `muestras/`. Pruebas en caliente de "anota" y "estado" validadas contra la bóveda. Commit local realizado (`b835f62`).

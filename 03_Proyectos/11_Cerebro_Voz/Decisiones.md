@@ -38,3 +38,16 @@ fuente: "Sesión Claude 2026-11-03"
 ## 2026-11-03 — Alcance de la «conversación»
 - **Decisión:** en fase 1 el modo conversación entiende las órdenes del router. Para charla libre y preguntas abiertas hace falta la fase 2 (Gemini de pago), que se enchufa en el router como respuesta por defecto.
 - **Motivo:** sin LLM no hay comprensión libre; con LLM, el coste y la privacidad quedan controlados por el límite de gasto.
+
+## 2026-11-03 — Portabilidad al home server (obligatoria desde la fase 1)
+- **Decisión:** todo componente de Cerebro (núcleo de voz, HUD, futuros trabajadores) debe poder ejecutarse sin cambios de código en Linux dentro de Docker:
+  - Rutas y puertos solo por configuración o variables de entorno (`CEREBRO_VAULT`, `VOZ_HOST`, `VOZ_PORT`); nada de rutas de Windows en el código.
+  - El micrófono y el altavoz pertenecen al **cliente** (navegador, PWA). El servidor solo recibe audio y devuelve audio. El atajo de teclado es un cliente opcional, separado del núcleo.
+  - La bóveda se lee y escribe como archivos `.md` (sin depender del plugin REST de Obsidian, que necesita la app abierta).
+  - Escucha en `127.0.0.1` por defecto; para exponerlo se pone delante un proxy con autenticación (fase 5), nunca abriendo el puerto directamente.
+  - Incluir `Dockerfile` y `docker-compose.yml` (servicios `hud`, `voz`) aunque hoy se ejecute en Windows.
+- **Motivo:** la fase 5 lleva Cerebro al ThinkCentre (24/7) con acceso desde cualquier portátil o el iPhone. Si se diseña portable ahora, migrar será copiar contenedores; si no, habría que reescribirlo.
+
+## 2026-11-03 — LLM local primero
+- **Decisión:** la fase 2 usa Ollama en la RX 6900 XT (16 GB) como LLM por defecto; Gemini de pago pasa a ser un respaldo opcional. Proveedor intercambiable por configuración.
+- **Motivo:** hay hardware capaz (antes se creía que no). Coste 0 y privacidad total; la fase 6 del roadmap (cerebro propio) se adelanta. Gemini solo para lo que el modelo local no resuelva bien.

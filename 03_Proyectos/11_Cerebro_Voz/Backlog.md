@@ -12,7 +12,7 @@ fuente: "Sesión Claude 2026-11-03"
 # Backlog — Cerebro Voz
 
 ## Ahora
-- [ ] (Antigravity) T-20261103-07 Fase 1: núcleo local (atajo → STT → reglas → TTS).
+- [x] (Antigravity) T-20261103-07 Fase 1: núcleo local (atajo → STT → reglas → TTS).
 - [ ] (Usuario) Probar la fase 1 y elegir el ajuste de voz definitivo entre las 3 variantes que genere Antigravity.
 
 ## Siguiente

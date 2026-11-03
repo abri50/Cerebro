@@ -74,3 +74,11 @@ WHERE tipo = "sesion_estudio"
 SORT fecha DESC
 LIMIT 5
 ```
+
+## 🔍 Pendiente de verificar
+```dataview
+LIST generado_por
+FROM ""
+WHERE verificado = false
+SORT file.mtime DESC
+```

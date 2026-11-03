@@ -126,3 +126,21 @@ tags: ["universidad", "sesion"]
 ## Log de IAs
 
 No usa YAML por entrada; es un archivo único con una sección `##` por entrada (ver [[02_Registro_Actividad_IAs]]).
+
+## Notas generadas por IA
+
+Toda nota creada o redactada por una IA debe incorporar en su frontmatter YAML las siguientes claves obligatorias adicionales:
+
+```yaml
+generado_por: claude | antigravity | gemini | notebooklm
+verificado: false
+fuente: "" # ruta a archivo de la bóveda, URL o "conocimiento del modelo"
+```
+
+| Clave | Tipo de dato | Valores permitidos |
+|---|---|---|
+| `generado_por` | string | `claude` \| `antigravity` \| `gemini` \| `notebooklm` |
+| `verificado` | booleano | Inicialmente `false`. Solo el usuario cambia `verificado` a `true`. |
+| `fuente` | string | Ruta interna a la nota fuente, URL externa o `"conocimiento del modelo"` |
+
+**Regla de verificación:** fechas, cifras y datos que no salgan de una fuente citada van en una sección final `## Por comprobar`. Solo el usuario cambia `verificado` a `true`.

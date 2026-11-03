@@ -95,3 +95,5 @@ El esquema de referencia por tipo de nota está en [[04_Esquema_YAML]]. Toda not
 3. Si se tomó una decisión técnica, añadirla a `Decisiones.md` (fecha, decisión, motivo).
 4. Añadir la entrada correspondiente al registro de actividad.
 **Trabajo desde un repositorio de código:** el `AGENTS.md` del repositorio indica la carpeta del proyecto en CEREBRO; el traspaso se escribe siempre en CEREBRO, no en el repositorio.
+**Higiene de memoria:** en CEREBRO solo se escriben resultados verificados. Intentos fallidos, mensajes de error y salidas de herramientas no se copian; se resumen en una línea ("Bloqueado: motivo").
+**Rotación del registro:** cuando 02_Registro_Actividad_IAs.md supere 20 entradas, Antigravity (flash) mueve sin modificarlas las entradas de meses anteriores a 00_Sistema_IA/Registro_Archivo/AAAA-MM.md y deja en el registro solo el mes en curso. Las IAs leen el archivo solo si lo necesitan.

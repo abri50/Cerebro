@@ -208,3 +208,12 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Hecho:** v80 en `abri50/asesor-financiero`: los fijos automáticos no se duplican tras un pago adelantado (ni si se apuntó como movimiento normal) y se limpian los duplicados ya creados. Tests t93 y t94 nuevos.
 - **Estado:** subido a `main` y desplegado en Vercel. No reproducido: cargo fijo que baja el saldo sin salir en Movimientos/Gastos.
 - **Siguiente:** pedir al usuario qué fijo concreto no aparece; revisar el Supabase real (segunda cuenta).
+
+
+## 2026-11-03 20:50 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** procesadas las tareas pendientes de `00_Sistema_IA/05_Cola_Antigravity.md`:
+  - **T-20261103-01:** añadida la regla 7 de fallback en `00_Sistema_IA/06_Enrutado_IAs.md` y las cláusulas de "Higiene de memoria" y "Rotación del registro" en `00_Sistema_IA/01_Instrucciones_Generales.md`.
+  - **T-20261103-02:** añadida la sección "Notas generadas por IA" en `00_Sistema_IA/04_Esquema_YAML.md` (claves `generado_por`, `verificado: false`, `fuente: ""`), directriz de cumplimiento en `AGENTS.md` y vista Dataview "🔍 Pendiente de verificar" en `00_Sistema_IA/00_Dashboard.md`.
+  - Tareas verificadas y movidas a `## Hechas` en la cola.
+- **Estado:** cola vacía (0 pendientes, 2 hechas). Bóveda al día.
+- **Siguiente:** —

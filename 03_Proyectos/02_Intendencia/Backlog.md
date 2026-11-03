@@ -11,8 +11,10 @@ tags: []
 
 ## Ahora
 
+- [ ] Confirmar con el usuario si, tras v80, algún cargo fijo automático sigue sin aparecer en Movimientos/Gastos (síntoma no reproducido).
+
 - [ ] Revisar el proyecto real de Supabase (segunda cuenta, no conectada al MCP): Advisors de seguridad y rendimiento.
-- [ ] Hacer que t18, t23, t41, t45 y t53 no dependan de la fecha del sistema.
+- [ ] Hacer que t18, t23, t41, t53 y t76 no dependan de la fecha del sistema.
 
 ## Siguiente
 

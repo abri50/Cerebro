@@ -4,7 +4,7 @@ area: "desarrollo"
 fecha: 2026-11-02
 estado: "activo"
 proyecto: intendencia
-siguiente_accion: "Revisar el proyecto real de Supabase (segunda cuenta) y ajustar 5 tests que dependen de la fecha"
+siguiente_accion: "Confirmar con el usuario si aún falta algún cargo fijo en Movimientos/Gastos; revisar Supabase real (segunda cuenta)"
 prioridad: 2
 stack: [html, tailwind, supabase]
 tags: ["codigo", "proyecto"]
@@ -27,7 +27,7 @@ App web de gestión financiera personal.
 - **Ruta local:** `C:\dev\asesor-financiero`
 - **Remoto:** `https://github.com/abri50/asesor-financiero.git` (privado). Producción: https://asesor-financiero-blond.vercel.app (despliegue automático desde `main`).
 
-## Estado actual (v79, 2026-11-02)
+## Estado actual (v80, 2026-11-03)
 
 - **Arquitectura:** HTML estático generado por `src/build.py` a partir de `src/app.html`, bloques `src/block*.js` y CSS. Datos locales; sincronización cifrada de extremo a extremo (AES-GCM) con Supabase. PWA para iPhone (escritorio).
 - **Auditor:** Gemini vía función de Vercel (`api/chat-auditor.js`, streaming). Solo envía un resumen financiero cuando el usuario pulsa Enviar. La clave está en la variable `API_GEMINI` de Vercel.

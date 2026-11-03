@@ -18,3 +18,4 @@ Formato: fecha | decisión | motivo.
 2026-10 | Auditor con Gemini en streaming y modelo rápido | La respuesta tardaba demasiado; solo envía un resumen cuando se pulsa Enviar.
 2026-11 | Un fijo del mes siguiente se puede adelantar (`fxFor`) | Cobrar o pagar antes no debe duplicar el cargo el día previsto.
 2026-11 | Una sola cuenta de «cuánto me queda»: la del ciclo de nómina | Había cuatro cifras y horizontes distintos entre pantallas.
+2026-11 | Un fijo automático no se cobra si ya estaba pagado: pago adelantado, movimiento normal equivalente (misma cuenta, categoría e importe, -12/+5 días) o duplicado ya creado, que se retira solo | Un móvil con versión antigua creó cargos duplicados al no entender `fxFor`.

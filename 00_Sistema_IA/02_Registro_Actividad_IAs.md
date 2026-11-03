@@ -204,11 +204,7 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
 - **Siguiente:** —
 
 
-
-
-
-
-
-
-
-
+## 2026-11-03 13:30 — Claude (Sonnet 5.5) — intendencia
+- **Hecho:** v80 en `abri50/asesor-financiero`: los fijos automáticos no se duplican tras un pago adelantado (ni si se apuntó como movimiento normal) y se limpian los duplicados ya creados. Tests t93 y t94 nuevos.
+- **Estado:** subido a `main` y desplegado en Vercel. No reproducido: cargo fijo que baja el saldo sin salir en Movimientos/Gastos.
+- **Siguiente:** pedir al usuario qué fijo concreto no aparece; revisar el Supabase real (segunda cuenta).

@@ -4,7 +4,7 @@ area: "desarrollo"
 fecha: 2026-11-03
 estado: "activo"
 proyecto: "cerebro_voz"
-siguiente_accion: "Usuario: probar fase 1 y elegir variante de voz en C:\\dev\\cerebro-voz\\muestras\\"
+siguiente_accion: "Antigravity: ejecutar T-20261103-08 (modo conversación en HUD)"
 prioridad: 2
 tags: ["codigo", "proyecto", "voz"]
 generado_por: "claude"

@@ -13,6 +13,8 @@ fuente: "Sesión Claude 2026-11-03"
 
 ## Ahora
 - [x] (Antigravity) T-20261103-07 Fase 1: núcleo local (atajo → STT → reglas → TTS).
+- [x] (Antigravity) T-20261103-10 Identidad de Cerebro en el router de voz.
+- [ ] (Antigravity) T-20261103-08 Modo conversación en la interfaz CEREBRO // CORE (127.0.0.1:3000).
 - [ ] (Usuario) Probar la fase 1 y elegir el ajuste de voz definitivo entre las 3 variantes que genere Antigravity.
 
 ## Siguiente

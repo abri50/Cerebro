@@ -107,6 +107,11 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
   - Tests: cadena de filtros y argumentos generados para cada preset (sin ejecutar ffmpeg) y `PlayRes` = resolución del preset.
   - **Criterio de hecho añadido:** `ffprobe` del archivo final da 2160×3840, `yuv420p`, H.264 y audio AAC 48 kHz; los subtítulos se ven nítidos con zoom al 100 % sobre un fotograma 4K exportado con `ffmpeg -ss 5 -frames:v 1`.
 
+- **Ampliación 2 (2026-11-03, prevalece): hallazgos del informe** `03_Proyectos/12_Montaje/Informe_RE_CapCut.md`, decisiones D07 y D08.
+  - `words.js`: corrección difusa con `glosario.json`: compara palabras y n-gramas de 1-3 palabras con cada término (distancia de Levenshtein normalizada ≤ 0,25 o igual clave fonética española simplificada: sin tildes, `v→b`, `z/ce/ci→s`, `ll→y`, `h` muda, `qu/k→c`). Conserva `conf` por palabra (media de las probabilidades de sus tokens) en el `.montaje.json`.
+  - `render.js`: en `tiktok-4k` usa `-rc qvbr` con `-qvbr_quality_level` (comprueba nombre y rango con `ffmpeg -h encoder=h264_amf`) y techo `-maxrate 80M`; si QVBR no existe en esa build, vuelve a `vbr_peak`. No ofrezcas `av1_amf`.
+  - Tests nuevos: «tactical barbel», «taktikal barbell» y «combat guarrior» se corrigen; una palabra común cercana pero fuera del glosario no se toca.
+
 ## Hechas
 ##### T-20261103-01 — Reglas de memoria (lecciones JARVIS)
 - **Proyecto:** cerebro
@@ -171,3 +176,10 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Criterio de hecho:** `pytest` en verde; con el atajo, «anota prueba de voz» añade la línea al inbox y «estado» lee `00_Estado_Actual` en voz alta; existen las 3 muestras de voz; commit local hecho (sin push).
 - **Modelo sugerido:** pro
 - **Resultado:** Completado el 2026-11-03. Inicializado `C:\dev\cerebro-voz` con Python 3.13 en venv, faster-whisper (small) y Piper TTS (es_ES-davefx-medium) en local. Implementados `audio_fx.py` (WSOLA + reverb sintético), `router.py`, `audio_capture.py`, `stt.py`, `tts.py`, `main.py` y `config.toml`. Suite pytest en verde (3/3 pasando: aislamiento sin red, normalización y 13 casos de enrutado). Generadas 3 muestras de voz en `muestras/`. Pruebas en caliente de "anota" y "estado" validadas contra la bóveda. Commit local realizado (`b835f62`).
+
+##### T-20261103-10 — Identidad de Cerebro en el router de voz
+- **Proyecto:** cerebro_voz
+- **Orden:** implementada en `C:\dev\cerebro-voz`: `identidad.py` con carga dinámica y recarga por mtime de `00_Sistema_IA/07_Identidad_Cerebro.md`, evaluación previa de cortesía e identidad en `router.py`, saludo al arrancar en `main.py` con impresión de consola, y suite de tests completa verificando tratamiento de respeto formal (usted/señor) y alternancia de respuestas.
+- **Criterio de hecho:** al arrancar se oye el saludo; con el atajo, «hola» responde con la identidad y saludo temporal de Cerebro; tests en verde (5/5).
+- **Modelo sugerido:** flash
+- **Resultado:** Completado el 2026-11-04. Creado `identidad.py` con soporte para `{saludo}`, `{n}`, `{resumen_salud}`, `{componente}` y selección sin repetición inmediata. `router.py` prioriza reglas de identidad (saludo, identidad, agradecimiento, despedida, estado propio) y fallback formal. Saludo en arranque implementado en `main.py` con mensaje «Cerebro escuchando. Pulse Ctrl+Alt+C para hablar.». Tests pytest actualizados (5/5 pasando). Commit local en repo `C:\dev\cerebro-voz` (`f72a520`).

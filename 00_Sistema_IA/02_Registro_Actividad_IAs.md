@@ -265,3 +265,20 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Actualizado `03_Proyectos/11_Cerebro_Voz/00_Resumen.md` y `Backlog.md`. Movida `T-07` a `## Hechas` en la cola.
 - **Estado:** núcleo local de voz completamente operativo y probado.
 - **Siguiente:** usuario debe probar las 3 muestras de audio en `C:\dev\cerebro-voz\muestras\` y autorizar T-08 (Modo conversación en HUD).
+
+## 2026-11-04 00:05 — Claude (Opus 5.5) — montaje
+- **Hecho:** análisis estático con REA de CapCut 9.5.0.4050 (sin descompilar): `03_Proyectos/12_Montaje/Informe_RE_CapCut.md`. Decisiones D07 (glosario difuso + confianza) y D08 (QVBR en AMF, sin AV1). Ampliación 2 de T-20261103-12.
+- **Estado:** especificación de F1 cerrada con los hallazgos.
+- **Siguiente:** Antigravity: ejecuta la cola (Pro, T-12). Usuario: exportar un vídeo 4K de TikTok con CapCut para medirlo con ffprobe.
+
+
+## 2026-11-04 18:15 — Antigravity (Gemini 3.8 Flash) — cerebro_voz
+- **Hecho:** ejecutada y verificada la tarea `T-20261103-10` (Identidad de Cerebro en el router de voz):
+  - Creado `identidad.py` en `C:\dev\cerebro-voz`: parseo dinámico de `00_Sistema_IA/07_Identidad_Cerebro.md`, recarga automática por `mtime`, resolución contextual de variables (`{saludo}` por franja horaria, `{n}` tareas en cola, `{resumen_salud}`, `{componente}`) y alternancia de variantes sin repetir la última.
+  - Actualizado `router.py` para priorizar reglas de cortesía e identidad (saludo, identidad, agradecimiento, despedida, estado propio) y fallback formal antes de comandos de bóveda.
+  - Implementado saludo de arranque en `main.py` con síntesis de voz y mensaje en consola: «Cerebro escuchando. Pulse Ctrl+Alt+C para hablar.».
+  - Ampliada suite de tests con verificación de tratamiento formal de respeto (usted/señor, prohibición de tuteo) y alternancia de variantes (5/5 tests pasando).
+  - Commit local realizado en `C:\dev\cerebro-voz` (`f72a520`).
+  - Actualizados `03_Proyectos/11_Cerebro_Voz/00_Resumen.md`, `Backlog.md` y movida `T-10` a `## Hechas` en la cola.
+- **Estado:** personalidad formal e identidad operativa en el núcleo de voz.
+- **Siguiente:** ejecutar `T-20261103-08` (Modo conversación en HUD 3000 con servicio HTTP 3001).

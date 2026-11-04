@@ -17,19 +17,6 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 ```
 
 ## Pendientes
-##### T-20261104-15 — Cerebro como app: un solo arranque (PRIORITARIA, después de T-14 y antes que T-11)
-- **Proyecto:** cerebro
-- **Orden:**
-  1. **Supervisor en el servidor Node del HUD:** al arrancar, lanza el núcleo de voz como proceso hijo (`<CEREBRO_VOZ_DIR>\.venv\Scripts\python.exe main.py --server`; ruta en la configuración, nada fijo en el código). Redirige su salida a `logs/voz.log`. Comprueba su salud cada 10 s; si cae, lo reinicia con espera creciente (máximo 5 reinicios en 10 min; después marca «Voz local offline» y deja de intentarlo). Al cerrar el servidor, mata el árbol de procesos hijo (en Windows, `taskkill /T /F` del PID).
-  2. **Modo servidor del núcleo:** `main.py --server` solo levanta el HTTP de 3001, sin atajo de teclado. El cliente del atajo queda como modo aparte opcional.
-  3. **Ollama:** si `llm_provider = "ollama"`, el supervisor comprueba `http://127.0.0.1:11434`; si no responde y `ollama` está instalado, lanza `ollama serve` como hijo. Si no está instalado, el HUD lo indica en el texto de salud.
-  4. **Lanzador sin consola:** en la raíz del repo del HUD, `Cerebro.vbs` arranca el servidor Node oculto, espera a que `/api/salud` responda (máx. 30 s) y abre la interfaz como ventana de app: `msedge --app=http://127.0.0.1:3000` (si no hay Edge, Chrome con `--app`). Si Cerebro ya está en marcha, solo abre la ventana.
-  5. **Acceso directo** «Cerebro» en el escritorio y en el menú Inicio apuntando a `Cerebro.vbs`, con icono `.ico` generado a partir de la esfera.
-  6. **Apagar:** en el HUD, «/apagar» (y el atajo Ctrl+Q) pide confirmación y llama a `POST /api/apagar`, que para los hijos y el servidor. Cerrar la ventana NO apaga Cerebro (sigue escuchando en segundo plano); documéntalo.
-  7. **Arranque con Windows:** opción `arranque_con_windows` (por defecto `false`); si es `true`, crea una tarea programada al iniciar sesión que ejecuta `Cerebro.vbs` sin abrir ventana. Pregunta al usuario antes de activarla.
-  8. README: «Doble clic en Cerebro y listo», con solución de problemas (puertos ocupados, logs).
-- **Criterio de hecho:** con todo apagado, doble clic en el acceso directo → en menos de 30 s se abre la ventana de Cerebro, la salud dice «Voz local lista» y «hola» responde con voz; sin ninguna consola visible; «/apagar» deja sin procesos `node`, `python` ni `ollama` lanzados por Cerebro.
-- **Modelo sugerido:** pro
 ##### T-20261103-05 — Partir la guía de POO en notas por unidad
 - **Proyecto:** cerebro (estudios)
 - **Orden:** BLOQUEADA hasta que el usuario pegue la guía de NotebookLM en `02_Estudios/01_Grado_Ingenieria_Informatica/Asignaturas/T1_Trimestre_1/01_Diseno_Programacion_Orientada_Objetos/Apuntes/_Guia_NotebookLM.md`. Entonces:
@@ -102,6 +89,16 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
   - Tests nuevos: «tactical barbel», «taktikal barbell» y «combat guarrior» se corrigen; una palabra común cercana pero fuera del glosario no se toca.
 
 ## Hechas
+##### T-20261104-15 — Cerebro como app: un solo arranque
+- **Proyecto:** cerebro
+- **Resultado:** Completado el 2026-11-04.
+  1. **Supervisor de subprocesos (`supervisor.js`):** implementada clase `ProcessSupervisor` integrada en `server.js`. Arranca el núcleo de voz local Python (`C:\dev\cerebro-voz\main.py --server`), redirigiendo logs a `logs/voz.log`. Health check cada 10s con auto-reinicio (hasta 5 intentos en 10 min con backoff exponencial). Monitoriza también Ollama en `http://127.0.0.1:11434` (levantando `ollama serve` si está disponible). En apagado ejecuta `taskkill /T /F` contra todos los PIDs hijos.
+  2. **Modo servidor de voz:** añadido flag `--server` a `main.py` en `C:\dev\cerebro-voz` para levantar exclusivamente HTTP en `127.0.0.1:3001` sin atajos globales. Control de bloqueo de archivos en `FileHandler` para permitir concurrencia CLI/supervisor.
+  3. **Lanzador silencioso (`Cerebro.vbs`):** script VBScript en la raíz de `cerebro-dashboard`. Verifica si el puerto 3000 ya responde; si no, lanza Node en segundo plano oculto (`vbHide`), espera hasta 30s a `/api/salud` y abre la app en modo ventana nativa con Edge (`msedge --app=http://127.0.0.1:3000`) o Chrome.
+  4. **Accesos directos:** generados iconos `cerebro.ico` y `public/favicon.ico` con la paleta sináptica del orbe. Creados accesos directos `Cerebro.lnk` en el Escritorio del usuario y en el Menú Inicio (`AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Cerebro.lnk`).
+  5. **Apagado limpio:** implementado endpoint `POST /api/apagar` en `server.js`, comando `/apagar` en la consola HUD y atajo de teclado global `Ctrl+Q` con confirmación, que detiene el árbol de procesos hijos (Python/Ollama) y cierra el servidor Node.
+  6. **Documentación:** actualizado `README.md` con la sección «Doble clic en Cerebro y listo», ciclo de vida, resolución de problemas y logs. Añadida opción `arranque_con_windows: false` en `config.js`. Smoke test REST (11/11) superado. Commit local `a539281` en `cerebro-dashboard`.
+
 ##### T-20261104-14 — Ajustes del HUD v3: tamaño de la esfera y sin texto hablado
 - **Proyecto:** cerebro
 - **Resultado:** Completado el 2026-11-04.

@@ -334,3 +334,20 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Suite de tests `test-api.js` verificada (11/11 pruebas en verde). Commit local `ed78104` en `C:\dev\cerebro-dashboard`.
 - **Estado:** HUD v3 perfectamente encajado y calibrado en todas las resoluciones; experiencia auditiva pura y minimalista.
 - **Siguiente:** procesar `T-20261104-15` (Cerebro como app: un solo arranque).
+
+## 2026-11-04 23:15 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** ejecutada la tarea `T-20261104-15` (Cerebro como app: un solo arranque):
+  - Implementado supervisor de subprocesos en Node.js (`supervisor.js`) e integrado en `server.js`:
+    - Arranca automáticamente el núcleo de voz local Python (`C:\dev\cerebro-voz\main.py --server`), redirigiendo logs a `logs/voz.log`.
+    - Health check periódico cada 10 s; si el proceso cae, realiza auto-reinicio progresivo con backoff exponencial (hasta 5 intentos en 10 min; tras superarlo marca «Voz local offline»).
+    - Supervisión de Ollama: verifica `http://127.0.0.1:11434`; si está caído e instalado en el sistema, lanza `ollama serve` como hijo. Expone estado en `/api/salud` (`ollamaOnline`, `ollamaInstalled`).
+    - Al cerrarse el servidor, ejecuta `taskkill /T /F` sobre todos los árboles de procesos hijo en Windows.
+  - Actualizado `C:\dev\cerebro-voz\main.py` con flag `--server` para levantar solo el servidor HTTP en el puerto 3001 sin activar el hook global de teclado. Manejo de concurrencia y control de bloqueo en `FileHandler` de logging.
+  - Creado script lanzador silencioso `Cerebro.vbs` en la raíz de `cerebro-dashboard`: detecta si el puerto 3000 ya responde; si no, lanza Node oculto (`vbHide`), espera la disponibilidad de `/api/salud` (máx. 30 s) y abre la interfaz en modo ventana de app nativa con Edge o Chrome (`--app=http://127.0.0.1:3000`). Si ya está corriendo, enfoca la ventana existente sin duplicar procesos.
+  - Generado icono multirresolución `cerebro.ico` y `public/favicon.ico` con la paleta sináptica del orbe WebGL.
+  - Creados accesos directos de Windows `Cerebro.lnk` en el Escritorio del usuario y en el Menú Inicio (`AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Cerebro.lnk`).
+  - Implementado apagado limpio: atajo `Ctrl+Q` en el HUD, comando `/apagar` en la consola interactiva y endpoint `POST /api/apagar`, cerrando ordenadamente Python, Ollama y Node.
+  - Documentación actualizada en `README.md` («Doble clic en Cerebro y listo», ciclo de vida, resolución de problemas y logs).
+  - Smoke tests REST `test-api.js` verificados (11/11 pruebas en verde). Commit local `a539281` en `C:\dev\cerebro-dashboard` y `1dee5d9` en `C:\dev\cerebro-voz`.
+- **Estado:** Cerebro empaquetado como aplicación de escritorio nativa en Windows; arranque unificado con un solo clic, sin consolas visibles y con apagado limpio.
+- **Siguiente:** revisar cola: T-05 y T-11 bloqueadas; proceder con `T-20261103-12` (Montaje F1: motor de subtítulos automáticos CLI).

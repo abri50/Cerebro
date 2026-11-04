@@ -294,3 +294,13 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Actualizados `03_Proyectos/11_Cerebro_Voz/00_Resumen.md`, `Backlog.md` y movida `T-08` a `## Hechas` en la cola.
 - **Estado:** modo conversación por voz 100% local, integrado y probado de extremo a extremo entre los puertos 3000 y 3001.
 - **Siguiente:** ejecutar `T-20261103-09` (HUD v2 según especificación de diseño).
+
+## 2026-11-04 19:25 — Antigravity (Gemini 3.8 Flash) — cerebro_voz
+- **Hecho:** correcciones urgentes en `cerebro-voz` y HUD:
+  - Resuelto error `open() got an unexpected keyword argument 'metadata_errors'` en faster-whisper al fijar `av<14` (instalado `av==13.1.0` con wheel nativo para Python 3.13) en `C:\dev\cerebro-voz\requirements.txt`.
+  - Creada suite `tests/test_audio_decode.py` con pruebas de decodificación de audio real WAV (16kHz) y WebM/Opus (como el generado por `MediaRecorder` del navegador), además de verificación de fallback hablado ante audio corrupto. Suite pytest completa en verde (9/9).
+  - Implementado fallback de voz en `server.py`: ante cualquier fallo de STT o decodificación, el servidor devuelve HTTP 200 con `{ success: false, respuesta: "Tengo un problema con el reconocimiento de voz, señor.", audio_base64: "..." }`, permitiendo que el HUD reproduzca la voz sintética de aviso.
+  - Corregido recorte y bordes rectos de la esfera en el HUD (`public/index.html` y `public/app.js`): canvas configurado con `position: absolute; inset: 0` ocupando toda el área central con `overflow: visible`; deformación procedural acotada a lo largo de la normal con armónicos simplex suaves (lerp continuo entre 3% en reposo y hasta 15% del radio base en habla/escucha); cámara ajustada dinámicamente con ≥25% de margen sobre el radio máximo deformado en cualquier aspect ratio de ventana.
+  - Commits locales en `C:\dev\cerebro-voz` (`9cc575b`) y `C:\dev\cerebro-dashboard` (`c749fa8`).
+- **Estado:** modo voz y HUD interactivo 100% operativos, estables y sin recortes.
+- **Siguiente:** continuar con la cola de tareas (`T-20261103-09` HUD v2 o `T-20261103-11` Cerebro Voz fase 2 con Ollama/Gemini).

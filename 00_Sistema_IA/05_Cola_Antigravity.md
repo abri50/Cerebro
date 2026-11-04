@@ -17,6 +17,19 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 ```
 
 ## Pendientes
+##### T-20261104-15 — Cerebro como app: un solo arranque (PRIORITARIA, después de T-14 y antes que T-11)
+- **Proyecto:** cerebro
+- **Orden:**
+  1. **Supervisor en el servidor Node del HUD:** al arrancar, lanza el núcleo de voz como proceso hijo (`<CEREBRO_VOZ_DIR>\.venv\Scripts\python.exe main.py --server`; ruta en la configuración, nada fijo en el código). Redirige su salida a `logs/voz.log`. Comprueba su salud cada 10 s; si cae, lo reinicia con espera creciente (máximo 5 reinicios en 10 min; después marca «Voz local offline» y deja de intentarlo). Al cerrar el servidor, mata el árbol de procesos hijo (en Windows, `taskkill /T /F` del PID).
+  2. **Modo servidor del núcleo:** `main.py --server` solo levanta el HTTP de 3001, sin atajo de teclado. El cliente del atajo queda como modo aparte opcional.
+  3. **Ollama:** si `llm_provider = "ollama"`, el supervisor comprueba `http://127.0.0.1:11434`; si no responde y `ollama` está instalado, lanza `ollama serve` como hijo. Si no está instalado, el HUD lo indica en el texto de salud.
+  4. **Lanzador sin consola:** en la raíz del repo del HUD, `Cerebro.vbs` arranca el servidor Node oculto, espera a que `/api/salud` responda (máx. 30 s) y abre la interfaz como ventana de app: `msedge --app=http://127.0.0.1:3000` (si no hay Edge, Chrome con `--app`). Si Cerebro ya está en marcha, solo abre la ventana.
+  5. **Acceso directo** «Cerebro» en el escritorio y en el menú Inicio apuntando a `Cerebro.vbs`, con icono `.ico` generado a partir de la esfera.
+  6. **Apagar:** en el HUD, «/apagar» (y el atajo Ctrl+Q) pide confirmación y llama a `POST /api/apagar`, que para los hijos y el servidor. Cerrar la ventana NO apaga Cerebro (sigue escuchando en segundo plano); documéntalo.
+  7. **Arranque con Windows:** opción `arranque_con_windows` (por defecto `false`); si es `true`, crea una tarea programada al iniciar sesión que ejecuta `Cerebro.vbs` sin abrir ventana. Pregunta al usuario antes de activarla.
+  8. README: «Doble clic en Cerebro y listo», con solución de problemas (puertos ocupados, logs).
+- **Criterio de hecho:** con todo apagado, doble clic en el acceso directo → en menos de 30 s se abre la ventana de Cerebro, la salud dice «Voz local lista» y «hola» responde con voz; sin ninguna consola visible; «/apagar» deja sin procesos `node`, `python` ni `ollama` lanzados por Cerebro.
+- **Modelo sugerido:** pro
 ##### T-20261103-05 — Partir la guía de POO en notas por unidad
 - **Proyecto:** cerebro (estudios)
 - **Orden:** BLOQUEADA hasta que el usuario pegue la guía de NotebookLM en `02_Estudios/01_Grado_Ingenieria_Informatica/Asignaturas/T1_Trimestre_1/01_Diseno_Programacion_Orientada_Objetos/Apuntes/_Guia_NotebookLM.md`. Entonces:
@@ -89,6 +102,14 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
   - Tests nuevos: «tactical barbel», «taktikal barbell» y «combat guarrior» se corrigen; una palabra común cercana pero fuera del glosario no se toca.
 
 ## Hechas
+##### T-20261104-14 — Ajustes del HUD v3: tamaño de la esfera y sin texto hablado
+- **Proyecto:** cerebro
+- **Resultado:** Completado el 2026-11-04.
+  1. Tamaño y centrado exacto de la esfera calculado a partir del hueco real entre la línea del día (`#dia`) y el indicador de estado (`#estado`): radio máximo deformado = 40 % de la altura del hueco y 30 % del ancho. La esfera y sus partículas quedan 100 % centradas y contenidas en el marco sin desbordar. Recálculo automático en cada resize.
+  2. Transcripción hablada eliminada de la vista visible y contenida en contenedor con `aria-live="polite"` (`#subtitulos-live`). Añadida opción `subtitulos: false` en `config` (activable mediante `localStorage` o clase `.con-subtitulos`). Debajo de la esfera queda únicamente el estado (`#estado`).
+  3. Estado de la voz: al hacer clic en la esfera con el servicio 3001 caído, el estado muestra inmediatamente «Voz no disponible: arranque el núcleo de voz» en color de alerta en lugar de intentar capturar micrófono.
+  4. Verificado y capturado en 1366×768, 1920×1080 y 390×844: capturas adjuntadas en `03_Proyectos/10_Cerebro/capturas/`.
+
 ##### T-20261104-13 — HUD v3: nuevo layout con la esfera actual
 - **Proyecto:** cerebro
 - **Resultado:** Completado el 2026-11-04. Implementado el layout de HUD v3 según `HUD_v3_prototipo.html` y la Corrección final:

@@ -321,3 +321,16 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - T-09 marcada como «Sustituida por T-13» y T-13 completada en `00_Sistema_IA/05_Cola_Antigravity.md`.
 - **Estado:** HUD v3 de Cerebro operativo, limpio, reactivo, sin datos inventados y con Three.js local a 60 fps estables.
 - **Siguiente:** en la cola: T-05 bloqueada por guía NotebookLM; T-11 bloqueada a la espera de instalación de Ollama o GEMINI_API_KEY; siguiente tarea ejecutable: T-12 (Montaje F1: motor de subtítulos CLI).
+
+## 2026-11-04 22:50 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** ejecutada la tarea `T-20261104-14` (Ajustes del HUD v3: tamaño de la esfera y sin texto hablado):
+  - Modificado el dimensionamiento y posicionamiento de la esfera Three.js en `public/app.js`: se calcula el hueco real entre la línea del día (`#dia`) y el indicador de estado (`#estado`). Radio máximo deformado fijado estrictamente en el 40 % de la altura de dicho hueco y máximo 30 % de su ancho. Centrado en píxeles mapeado a coordenadas 3D de mundo a la distancia focal, con recálculo automático en cada evento `resize`.
+  - Eliminada la transcripción visible de la conversación (Cerebro solo se oye). Texto hablado trasladado a contenedor accesible `#subtitulos-live` con `aria-live="polite"`. Añadida opción `subtitulos: false` en `config` (re-activable en `true` o mediante clase `.con-subtitulos`). Debajo de la esfera queda únicamente el estado (`#estado`).
+  - Detección de caída de voz en interacción: si el servicio 3001 está offline, al hacer clic en la esfera el estado muestra inmediatamente «Voz no disponible: arranque el núcleo de voz» en color ámbar sin intentar acceder al micrófono.
+  - Generadas y verificadas 3 capturas de pantalla automáticas comprobando que ninguna parte de la esfera, anillo ni partículas toca el borde del marco:
+    - [hud_v3_1366x768.png](file:///C:/Users/aam12/Documents/CEREBRO/03_Proyectos/10_Cerebro/capturas/hud_v3_1366x768.png)
+    - [hud_v3_1920x1080.png](file:///C:/Users/aam12/Documents/CEREBRO/03_Proyectos/10_Cerebro/capturas/hud_v3_1920x1080.png)
+    - [hud_v3_390x844.png](file:///C:/Users/aam12/Documents/CEREBRO/03_Proyectos/10_Cerebro/capturas/hud_v3_390x844.png)
+  - Suite de tests `test-api.js` verificada (11/11 pruebas en verde). Commit local `ed78104` en `C:\dev\cerebro-dashboard`.
+- **Estado:** HUD v3 perfectamente encajado y calibrado en todas las resoluciones; experiencia auditiva pura y minimalista.
+- **Siguiente:** procesar `T-20261104-15` (Cerebro como app: un solo arranque).

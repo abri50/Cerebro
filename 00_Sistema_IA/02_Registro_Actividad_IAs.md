@@ -282,3 +282,15 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Actualizados `03_Proyectos/11_Cerebro_Voz/00_Resumen.md`, `Backlog.md` y movida `T-10` a `## Hechas` en la cola.
 - **Estado:** personalidad formal e identidad operativa en el núcleo de voz.
 - **Siguiente:** ejecutar `T-20261103-08` (Modo conversación en HUD 3000 con servicio HTTP 3001).
+
+## 2026-11-04 19:00 — Antigravity (Gemini 3.8 Flash) — cerebro_voz
+- **Hecho:** ejecutada y verificada la tarea `T-20261103-08` (Modo conversación en la interfaz CEREBRO // CORE 127.0.0.1:3000):
+  - Microservicio Python `server.py` en `C:\dev\cerebro-voz`: servidor HTTP local en `127.0.0.1:3001` sin dependencias externas, precarga de modelos en arranque, endpoints `GET /voz/estado` y `POST /voz/turno` (audio webm/wav o json con base64), memoria RAM volátil de últimos 10 turnos. Suite pytest 6/6 verde (`test_server.py`). Commit `3a3bb0b`.
+  - Backend Node.js en `C:\dev\cerebro-dashboard`: corregido comando `ping` (`ping_sistema`) devolviendo métricas reales de hardware, memoria, CPUs y uptime de `os` sin campos `undefined`. Endpoints proxy implementados: `GET /api/voz/estado`, `POST /api/voz/turno`, `POST /api/voz/resumen-sesion`.
+  - Frontend WebGL (`public/app.js`): implementada clase `ConversationManager` con captura de micrófono vía `MediaRecorder`, análisis nativo de silencio (1,2s) y amplitud con `AnalyserNode` de Web Audio API (cero Web Speech API externa). Deformación armónica del orbe Three.js reactiva a 5 estados (`reposo`, `escuchando`, `pensando`, `hablando`, `desconectado`).
+  - Control conversacional: activación/pausa mediante clic en la esfera, tecla Espacio (fuera de inputs) y comando `voz` en consola; bucle conversacional automático; salida por palabras clave («fin», «salir», «gracias Cerebro») o inactividad tras 30s.
+  - Smoke tests: suite `test-api.js` actualizada y validada al 100% (6/6 pruebas en verde).
+  - Documentación cruzada: creados/actualizados `README.md`, `CLAUDE.md`, `AGENTS.md` y `GEMINI.md` enlazados a `03_Proyectos/11_Cerebro_Voz/`. Commit `7243f32`.
+  - Actualizados `03_Proyectos/11_Cerebro_Voz/00_Resumen.md`, `Backlog.md` y movida `T-08` a `## Hechas` en la cola.
+- **Estado:** modo conversación por voz 100% local, integrado y probado de extremo a extremo entre los puertos 3000 y 3001.
+- **Siguiente:** ejecutar `T-20261103-09` (HUD v2 según especificación de diseño).

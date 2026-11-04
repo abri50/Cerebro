@@ -4,7 +4,7 @@ area: "desarrollo"
 fecha: 2026-11-03
 estado: "activo"
 proyecto: "cerebro_voz"
-siguiente_accion: "Antigravity: ejecutar T-20261103-08 (modo conversación en HUD)"
+siguiente_accion: "Fase 2: conversación libre (LLM intercambiable Ollama/Gemini, T-20261103-11)"
 prioridad: 2
 tags: ["codigo", "proyecto", "voz"]
 generado_por: "claude"

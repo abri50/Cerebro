@@ -28,23 +28,6 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Modelo sugerido:** flash
 - **Estado:** Bloqueada: a la espera de que el usuario pegue la guía de NotebookLM en `02_Estudios/01_Grado_Ingenieria_Informatica/Asignaturas/01_Curso_1/T1_Trimestre_1/01_Diseno_Programacion_Orientada_Objetos/Apuntes/_Guia_NotebookLM.md`.
 
-##### T-20261103-08 — Modo conversación en la interfaz CEREBRO // CORE (127.0.0.1:3000)
-- **Proyecto:** cerebro_voz
-- **Depende de:** T-20261103-07. **Ampliación de T-07:** además del atajo de teclado, el núcleo Python expone un servicio HTTP solo en `127.0.0.1:3001`: `POST /voz/turno` (audio webm/wav → `{texto_usuario, respuesta, accion}` + audio de respuesta en wav), `GET /voz/estado`. Misma lógica del router; sin red externa.
-- **Orden:**
-  1. Localiza el proyecto de la interfaz que sirve `127.0.0.1:3000` (probablemente `C:\dev\cerebro-dashboard`). Si no está bajo Git, haz `git init` y commit del estado actual antes de tocar nada.
-  2. Corrige el comando `ping`: hoy muestra `undefined` en Host, SO, memoria, CPUs y uptime. Haz que el endpoint devuelva y el front lea los campos de `os.hostname()`, `os.platform()`, `os.release()`, `os.freemem()`, `os.totalmem()`, `os.cpus().length`, `os.uptime()` y `process.uptime()`.
-  3. Clic en la esfera → entra o sale del **modo conversación** (también con la tecla Espacio y con el comando `voz`).
-  4. Captura del micrófono en el navegador con `MediaRecorder` + detección de silencio con Web Audio (`AnalyserNode`: el turno termina tras 1,2 s por debajo del umbral). **No uses la Web Speech API del navegador** (envía el audio a servidores externos). Cada turno → `POST http://127.0.0.1:3001/voz/turno` (proxy desde el servidor Node para evitar CORS).
-  5. Estados visuales de la esfera: `reposo` (giro lento) → `escuchando` (pulsa con la amplitud de tu voz) → `pensando` (rotación rápida, color más frío) → `hablando` (se deforma con la amplitud del audio de respuesta, vía `AnalyserNode` sobre la reproducción). El texto central muestra el estado y el terminal recoge cada turno como `TÚ:` / `CEREBRO:`.
-  6. Bucle de conversación: tras hablar Cerebro, vuelve a escuchar automáticamente. Sale con clic, con Espacio o al decir «fin», «salir» o «gracias Cerebro». Tiempo máximo de inactividad: 30 s.
-  7. Memoria de la conversación: solo en el servidor y en RAM (últimos 10 turnos). No se escribe nada en la bóveda salvo las órdenes explícitas (anota/registra). Al salir del modo, si hubo alguna orden ejecutada, añade una sola entrada al registro de actividad (`Cerebro Voz`) con el resumen.
-  8. Si el servicio de voz (3001) no responde: la esfera pasa a estado `desconectado` y el terminal lo indica; la interfaz sigue funcionando.
-  9. Crea en el repo de la interfaz `AGENTS.md`, `GEMINI.md` y `CLAUDE.md` enlazados a `CEREBRO/03_Proyectos/11_Cerebro_Voz/`. Documenta en el README cómo arrancar los dos procesos (3000 y 3001).
-  10. Actualiza `Backlog.md`, `siguiente_accion` y el registro.
-- **Criterio de hecho:** `ping` sin `undefined`; clic en la esfera → «estado» hablado → Cerebro responde con voz y la esfera reacciona en los 4 estados; «fin» sale del modo; ninguna petición de red sale de `127.0.0.1` (comprobado en la pestaña Red del navegador).
-- **Modelo sugerido:** pro
-
 ##### T-20261103-09 — HUD v2 según especificación de diseño
 - **Proyecto:** cerebro
 - **Depende de:** T-20261103-08.
@@ -183,3 +166,10 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Criterio de hecho:** al arrancar se oye el saludo; con el atajo, «hola» responde con la identidad y saludo temporal de Cerebro; tests en verde (5/5).
 - **Modelo sugerido:** flash
 - **Resultado:** Completado el 2026-11-04. Creado `identidad.py` con soporte para `{saludo}`, `{n}`, `{resumen_salud}`, `{componente}` y selección sin repetición inmediata. `router.py` prioriza reglas de identidad (saludo, identidad, agradecimiento, despedida, estado propio) y fallback formal. Saludo en arranque implementado en `main.py` con mensaje «Cerebro escuchando. Pulse Ctrl+Alt+C para hablar.». Tests pytest actualizados (5/5 pasando). Commit local en repo `C:\dev\cerebro-voz` (`f72a520`).
+
+##### T-20261103-08 — Modo conversación en la interfaz CEREBRO // CORE (127.0.0.1:3000)
+- **Proyecto:** cerebro_voz
+- **Orden:** implementado en `C:\dev\cerebro-voz` servicio HTTP `server.py` en `127.0.0.1:3001` con precarga de modelos en arranque, endpoints `GET /voz/estado` y `POST /voz/turno`, memoria RAM de últimos 10 turnos y suite pytest (6/6). En `C:\dev\cerebro-dashboard`: corregido comando `ping` sin `undefined` leyendo métricas de `os` y proceso; implementada clase `ConversationManager` con captura `MediaRecorder` nativa y análisis Web Audio (`AnalyserNode`), umbral de silencio a 1,2s y timeout de inactividad a 30s sin llamadas externas; orbe 3D reactivo a 5 estados (`reposo`, `escuchando`, `pensando`, `hablando`, `desconectado`) con deformación procedural y pulso de amplitud; bucle conversacional continuo y salida con clic, Espacio, o palabras clave («fin», «salir», «gracias Cerebro»); endpoints proxy `/api/voz/*`; suite de smoke tests actualizada con 6/6 tests en verde (`test-api.js`); documentación cruzada (`README.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`).
+- **Criterio de hecho:** `ping` sin `undefined`; clic en la esfera → «estado» hablado → Cerebro responde con voz y la esfera reacciona en los 4 estados; «fin» sale del modo; ninguna petición de red sale de `127.0.0.1` (comprobado en la pestaña Red del navegador).
+- **Modelo sugerido:** pro
+- **Resultado:** Completado el 2026-11-04. Implementación integral probada en caliente de ambos procesos (Node.js en 3000 y Python en 3001). Smoke test 6/6 verde. Telemetría de hardware verificada sin `undefined`. Proxy de voz operativo con retorno de WAV sintético base64 y estados lumínicos en el núcleo WebGL. Repositorios locales de `cerebro-voz` (commit `3a3bb0b`) y `cerebro-dashboard` (commit `7243f32`) sincronizados y documentados.

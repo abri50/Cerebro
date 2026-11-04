@@ -1,5 +1,6 @@
 # Secretos
 .obsidian/plugins/obsidian-local-rest-api/data.json
+.obsidian/plugins/smart-connections/data.json
 # Estado local de Obsidian (cambia constantemente, genera conflictos)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
@@ -10,3 +11,9 @@
 Thumbs.db
 desktop.ini
 .DS_Store
+
+
+
+
+# Ignore Smart Environment folder
+.smart-env

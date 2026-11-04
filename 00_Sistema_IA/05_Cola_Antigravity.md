@@ -28,13 +28,6 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Modelo sugerido:** flash
 - **Estado:** Bloqueada: a la espera de que el usuario pegue la guía de NotebookLM en `02_Estudios/01_Grado_Ingenieria_Informatica/Asignaturas/01_Curso_1/T1_Trimestre_1/01_Diseno_Programacion_Orientada_Objetos/Apuntes/_Guia_NotebookLM.md`.
 
-##### T-20261103-09 — HUD v2 según especificación de diseño
-- **Proyecto:** cerebro
-- **Depende de:** T-20261103-08.
-- **Orden:** implementa en la interfaz `127.0.0.1:3000` la especificación completa de `03_Proyectos/10_Cerebro/HUD_Diseno.md` (layout de 3 columnas, sistema visual, núcleo con shader y estados, partículas = tareas pendientes, color = salud global, endpoints `/api/estado`, `/api/cola`, `/api/registro`, `/api/proyectos`, `/api/salud` con SSE, movimiento y `prefers-reduced-motion`). Elimina cualquier métrica sin fuente real. Fuentes y Three.js en copia local. Commit por cada bloque (layout, visual, núcleo, datos). Sin push.
-- **Criterio de hecho:** cada número visible sale de un endpoint; la esfera cambia de color al detener el servicio de voz; las partículas coinciden con las tareas de la cola; 60 fps estables con la pestaña visible; con `prefers-reduced-motion` no hay animación. Captura de pantalla adjunta en el registro.
-- **Modelo sugerido:** pro
-
 ##### T-20261103-11 — Cerebro Voz, fase 2: conversación libre (LLM)
 - **Proyecto:** cerebro_voz
 - **Depende de:** T-07, T-08, T-10. **BLOQUEADA** hasta que el usuario confirme que la variable de entorno `GEMINI_API_KEY` existe (clave del nivel de pago).
@@ -96,6 +89,22 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
   - Tests nuevos: «tactical barbel», «taktikal barbell» y «combat guarrior» se corrigen; una palabra común cercana pero fuera del glosario no se toca.
 
 ## Hechas
+##### T-20261104-13 — HUD v3: nuevo layout con la esfera actual
+- **Proyecto:** cerebro
+- **Resultado:** Completado el 2026-11-04. Implementado el layout de HUD v3 según `HUD_v3_prototipo.html` y la Corrección final:
+  1. Esfera Three.js conservada y mejorada: posicionada en la parte superior, deformación orgánica por ruido a lo largo de la normal (3% reposo, hasta 15% con voz), cámara con margen de seguridad sin recortes, partículas orbitales interactivas ligadas a tareas de la cola con tooltip.
+  2. Marco de carta con paleta matizada oficial (`--terreno`, `--curva`, `--hueso`, `--senal`, `--violeta`, `--alerta`).
+  3. Línea del día 24 h en la cabecera alimentada con las horas de las entradas del registro de hoy.
+  4. Conversación protagonista en el centro con aparición sincronizada palabra por palabra (`.w.on`).
+  5. Márgenes laterales alimentados por datos reales de endpoints: `/api/estado` (prioridades, evaluación), `/api/cola` (tareas pendientes), `/api/proyectos` (proyecto activo), `/api/salud` (estado de voz y bóveda).
+  6. Entrada de texto oculta tras «/» que envía a `/api/voz/turno` y reproduce la respuesta hablada; eliminados terminal inferior y botones obsoletos.
+  7. Tipografía Archivo variable local (woff2) y Three.js local, sin dependencias CDN externas.
+  8. Suite `test-api.js` ampliada a 11 pruebas: 11/11 pasadas con 100% de éxito.
+
+##### T-20261103-09 — HUD v2 según especificación de diseño
+- **Proyecto:** cerebro
+- **Resultado:** Sustituida por T-13 (HUD v3).
+
 ##### T-20261103-01 — Reglas de memoria (lecciones JARVIS)
 - **Proyecto:** cerebro
 - **Orden:**

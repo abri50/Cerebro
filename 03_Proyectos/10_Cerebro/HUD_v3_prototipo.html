@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cerebro</title>
+<!-- En producción: copia local de Archivo (variable, ejes wght y wdth) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens ─────────────────────────────────────────────── */
+:root{
+  --terreno:#0E0713;      /* fondo: ciruela casi negro (paleta original de Cerebro) */
+  --curva:#5B2D73;        /* líneas principales en reposo */
+  --curva-tenue:#2E1838;
+  --hueso:#ECE6F2;        /* texto principal */
+  --hueso-tenue:#9C8FAE;  /* texto secundario */
+  --senal:#FF2E63;        /* carmesí del núcleo: voz activa */
+  --violeta:#8B5CF6;      /* pensando / sistema */
+  --alerta:#F5A524;       /* fallos (ámbar, distinto del carmesí) */
+  --margen:clamp(16px,3vw,32px);
+  --f:"Archivo",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--terreno);color:var(--hueso);font-family:var(--f);font-variation-settings:"wdth" 100;
+  overflow:hidden;-webkit-font-smoothing:antialiased}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+/* ── Marco ─────────────────────────────────────────────── */
+.carta{position:fixed;inset:var(--margen);border:1px solid var(--curva);display:grid;
+  grid-template-rows:auto 1fr auto;pointer-events:none}
+.carta > *{pointer-events:auto}
+
+/* Cabecera: marca + reloj + salud */
+.cabecera{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 18px 0}
+.marca{font-size:15px;font-weight:700;font-variation-settings:"wdth" 125;letter-spacing:.01em}
+.reloj{text-align:right;font-size:13px;color:var(--hueso-tenue);line-height:1.5;font-feature-settings:"tnum"}
+.reloj strong{color:var(--hueso);font-weight:600;font-variation-settings:"wdth" 75;font-size:15px}
+.salud.fallo{color:var(--alerta)}
+
+/* Línea del día: 24 h, marcas = entradas reales del registro */
+.dia{position:relative;margin:12px 18px 0;height:22px}
+.dia::before{content:"";position:absolute;left:0;right:0;top:10px;border-top:1px solid var(--curva-tenue)}
+.dia i{position:absolute;top:4px;width:1px;height:13px;background:var(--hueso-tenue)}
+.dia .ahora{background:var(--hueso);height:21px;top:0;width:2px}
+.dia span{position:absolute;top:-2px;font-size:10px;color:var(--hueso-tenue);transform:translateX(-50%);font-feature-settings:"tnum"}
+
+/* Centro: la conversación es la protagonista */
+.centro{display:grid;place-items:end center;text-align:center;padding:0 6vw 2vh;min-height:0;overflow:hidden}
+.dialogo{max-width:min(880px,72vw);text-shadow:0 0 22px var(--terreno),0 0 6px var(--terreno),0 0 2px var(--terreno)}
+.usted{font-size:clamp(14px,1.3vw,17px);color:var(--hueso-tenue);margin-bottom:14px;min-height:1.4em}
+.cerebro{font-size:clamp(22px,2.6vw,40px);line-height:1.12;font-weight:420;font-variation-settings:"wdth" 82;
+  text-wrap:balance;min-height:1.12em}
+.cerebro .w{opacity:0;transition:opacity .18s}
+.cerebro .w.on{opacity:1}
+.estado{margin-top:18px;font-size:13px;color:var(--hueso-tenue);transition:color .25s}
+body[data-estado="escuchando"] .estado,body[data-estado="hablando"] .estado{color:var(--senal)}
+body[data-estado="pensando"] .estado{color:var(--violeta)}
+
+/* Márgenes: datos reales */
+.pie{display:grid;grid-template-columns:minmax(0,280px) 1fr minmax(0,300px);gap:24px;align-items:end;padding:0 18px 16px}
+.leyenda h2{font-size:12px;font-weight:600;color:var(--hueso-tenue);margin-bottom:6px;font-variation-settings:"wdth" 100}
+.leyenda ol,.leyenda ul,.leyenda p{list-style:none;font-size:14px;line-height:1.4;text-shadow:0 0 10px var(--terreno)}
+.leyenda li{margin-bottom:3px}
+.leyenda .bloque + .bloque{margin-top:12px}
+.leyenda .cifra{font-size:28px;font-weight:300;font-variation-settings:"wdth" 70;line-height:1;font-feature-settings:"tnum"}
+.derecha{text-align:right}
+.pista{text-align:center;font-size:13px;color:var(--hueso-tenue)}
+.pista kbd{font-family:inherit;border:1px solid var(--curva);padding:1px 6px;border-radius:3px;color:var(--hueso)}
+
+/* Entrada de texto: oculta hasta pulsar "/" (sustituye al terminal) */
+.entrada{display:none;width:min(560px,90%);margin:0 auto}
+.entrada.on{display:block}
+.entrada input{width:100%;background:transparent;border:0;border-bottom:1px solid var(--curva);color:var(--hueso);
+  font:inherit;font-size:16px;padding:8px 2px;outline:none}
+.entrada input:focus{border-bottom-color:var(--hueso)}
+:focus-visible{outline:2px solid var(--hueso);outline-offset:3px}
+
+@media (max-width:820px){
+  body{overflow:auto}.carta{position:relative;inset:auto;margin:var(--margen);min-height:calc(100vh - 2*var(--margen))}
+  .dialogo{max-width:100%}
+  .pie{grid-template-columns:1fr;gap:14px}
+  .derecha{text-align:left}
+  .dia span{display:none}
+}
+</style>
+</head>
+<body data-estado="espera">
+<canvas id="campo" aria-hidden="true"></canvas>
+
+<main class="carta">
+  <header>
+    <div class="cabecera">
+      <div class="marca">Cerebro</div>
+      <div class="reloj"><strong id="hora">--:--</strong><br><span id="fecha"></span><br>
+        <span id="salud" class="salud">Voz local lista</span></div>
+    </div>
+    <div class="dia" id="dia" aria-label="Actividad de hoy"></div>
+  </header>
+
+  <section class="centro" aria-live="polite">
+    <div class="dialogo">
+      <p class="usted" id="usted"></p>
+      <p class="cerebro" id="cerebro"></p>
+      <p class="estado" id="estado">En espera</p>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <div class="leyenda">
+      <div class="bloque"><h2>Prioridades de la semana</h2><ol id="prioridades"></ol></div>
+      <div class="bloque"><h2>Próxima evaluación</h2><p id="evaluacion"></p></div>
+    </div>
+    <div>
+      <p class="pista" id="pista">Pulse <kbd>espacio</kbd> o haga clic para hablar, o <kbd>/</kbd> para escribir</p>
+      <form class="entrada" id="entrada"><input id="texto" autocomplete="off" aria-label="Escribir a Cerebro" placeholder="Escriba a Cerebro y pulse Intro"></form>
+    </div>
+    <div class="leyenda derecha">
+      <div class="bloque"><h2>En cola para Antigravity</h2><div class="cifra" id="nCola">0</div><ul id="cola"></ul></div>
+      <div class="bloque"><h2>Proyecto activo</h2><p id="proyecto"></p></div>
+    </div>
+  </footer>
+</main>
+
+<script>
+/* ── Datos: en producción vienen de /api/estado, /api/cola, /api/registro, /api/proyectos, /api/salud ── */
+const DATOS = {
+  prioridades: ["Cerrar la fase 1 de Cerebro Voz","Estudiar UD3 de POO","Base Building, semana 2"],
+  evaluacion: "PEC de Diseño y Programación Orientada a Objetos, en 9 días",
+  cola: ["Identidad de Cerebro","Modo conversación","Montaje: subtítulos"],
+  proyecto: "Cerebro Voz: conectar la identidad al router",
+  registroHoy: ["08:40","11:15","13:30","19:05","19:46"]
+};
+const RESPUESTAS = {
+  "hola":"Buenas tardes, señor. Cerebro operativo. ¿En qué puedo ayudarle hoy?",
+  "estado":"Tiene tres prioridades esta semana y tres tareas en cola. La PEC de POO es en nueve días.",
+  "quién eres":"Soy Cerebro, señor: su asistente y la memoria de todos sus proyectos."
+};
+
+/* ── Pintar márgenes ── */
+const $ = id => document.getElementById(id);
+DATOS.prioridades.forEach(t=>{const li=document.createElement("li");li.textContent=t;$("prioridades").append(li)});
+$("evaluacion").textContent = DATOS.evaluacion;
+$("nCola").textContent = DATOS.cola.length;
+DATOS.cola.forEach(t=>{const li=document.createElement("li");li.textContent=t;$("cola").append(li)});
+$("proyecto").textContent = DATOS.proyecto;
+
+function pintarDia(){
+  const d=$("dia"); d.innerHTML="";
+  [0,6,12,18,24].forEach(h=>{const s=document.createElement("span");s.style.left=(h/24*100)+"%";s.textContent=String(h).padStart(2,"0");d.append(s)});
+  DATOS.registroHoy.forEach(t=>{const [h,m]=t.split(":").map(Number);const i=document.createElement("i");i.style.left=((h+m/60)/24*100)+"%";i.title="Entrada del registro "+t;d.append(i)});
+  const n=new Date(),a=document.createElement("i");a.className="ahora";a.style.left=((n.getHours()+n.getMinutes()/60)/24*100)+"%";d.append(a);
+}
+function reloj(){
+  const n=new Date();
+  $("hora").textContent=n.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
+  $("fecha").textContent=n.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+}
+reloj();pintarDia();setInterval(()=>{reloj();pintarDia()},30000);
+
+/* ── Ruido 3D suave (value noise) ── */
+const P=new Uint8Array(512);{const p=[...Array(256).keys()];for(let i=255;i>0;i--){const j=(Math.random()*(i+1))|0;[p[i],p[j]]=[p[j],p[i]]}for(let i=0;i<512;i++)P[i]=p[i&255]}
+const fade=t=>t*t*t*(t*(t*6-15)+10), lerp=(a,b,t)=>a+(b-a)*t;
+const h3=(x,y,z)=>P[P[P[x&255]+(y&255)]+(z&255)]/255;
+function ruido(x,y,z){
+  const X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),u=fade(x-X),v=fade(y-Y),w=fade(z-Z);
+  return lerp(lerp(lerp(h3(X,Y,Z),h3(X+1,Y,Z),u),lerp(h3(X,Y+1,Z),h3(X+1,Y+1,Z),u),v),
+              lerp(lerp(h3(X,Y,Z+1),h3(X+1,Y,Z+1),u),lerp(h3(X,Y+1,Z+1),h3(X+1,Y+1,Z+1),u),v),w)*2-1;
+}
+
+/* ── Núcleo: la esfera de Cerebro (malla 3D proyectada en canvas 2D, sin dependencias) ── */
+const cv=$("campo"),cx=cv.getContext("2d");
+const reducido=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let W,H,dpr;
+function ajustar(){dpr=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)}
+addEventListener("resize",ajustar);ajustar();
+
+// Malla: 22 paralelos × 36 meridianos sobre la esfera unidad
+const LAT=22, LON=36, malla=[];
+for(let i=0;i<=LAT;i++){const th=i/LAT*Math.PI;for(let j=0;j<LON;j++){const ph=j/LON*Math.PI*2;
+  malla.push([Math.sin(th)*Math.cos(ph),Math.cos(th),Math.sin(th)*Math.sin(ph)])}}
+const idx=(i,j)=>i*LON+((j+LON)%LON);
+
+let amp=0, ampObj=0, t=0, rot=0, estado="espera";
+const COLORES={espera:"255,46,99",escuchando:"255,46,99",hablando:"255,46,99",pensando:"139,92,246"};
+function dibujar(){
+  cx.clearRect(0,0,W,H);
+  const R=Math.min(W,H)*0.18, x0=W/2, y0=H*0.37, foco=R*3.2;
+  amp = lerp(amp, ampObj, 0.12);
+  const vel = estado==="pensando" ? 0.012 : estado==="espera" ? 0.0025 : 0.005;
+  if(!reducido){ t += 0.006 + amp*0.02; rot += vel; }
+  const col=COLORES[estado];
+  // halo
+  const g=cx.createRadialGradient(x0,y0,R*0.2,x0,y0,R*2.4);
+  g.addColorStop(0,`rgba(${col},${0.16+amp*0.22})`);g.addColorStop(1,"rgba(14,7,19,0)");
+  cx.fillStyle=g;cx.fillRect(0,0,W,H);
+  // deformación: 3 % en reposo, hasta 15 % con voz (nunca se sale del lienzo: R es el 20 % del lado menor)
+  const deform = 0.025 + amp*0.09;
+  const cr=Math.cos(rot), sr=Math.sin(rot), ct=Math.cos(0.35), st=Math.sin(0.35);
+  const P2=malla.map(([x,y,z])=>{
+    // ondas suaves superpuestas: orgánico y sin artefactos de rejilla
+    const n=0.6*Math.sin(3.1*x+t*1.9)*Math.sin(2.7*y+t*1.3)*Math.sin(3.3*z+t*1.6)
+           +0.4*Math.sin(5.2*y-t*2.3+2.1*x)*Math.cos(4.6*z+t*1.1);
+    const r=1+deform*n;
+    let X=x*r, Y=y*r, Z=z*r;
+    const X1=X*cr+Z*sr, Z1=-X*sr+Z*cr;          // giro sobre el eje vertical
+    const Y2=Y*ct-Z1*st, Z2=Y*st+Z1*ct;          // inclinación fija
+    const k=foco/(foco+Z2*R);
+    return [x0+X1*R*k, y0+Y2*R*k, Z2];
+  });
+  const linea=(a,b)=>{const za=(P2[a][2]+P2[b][2])/2, alfa=0.12+0.55*(1-(za+1)/2);
+    cx.strokeStyle=`rgba(${col},${alfa})`;cx.beginPath();cx.moveTo(P2[a][0],P2[a][1]);cx.lineTo(P2[b][0],P2[b][1]);cx.stroke()};
+  cx.lineWidth=0.8;
+  for(let i=0;i<=LAT;i++)for(let j=0;j<LON;j++){
+    if(i>0&&i<LAT) linea(idx(i,j),idx(i,j+1));   // paralelos
+    if(i<LAT) linea(idx(i,j),idx(i+1,j));        // meridianos
+  }
+  // nodos
+  for(const [x,y,z] of P2){ if(z<0.2){ cx.fillStyle=`rgba(${col},${0.5+0.5*(1-(z+1)/2)})`; cx.fillRect(x-0.9,y-0.9,1.8,1.8);} }
+  if(!reducido) requestAnimationFrame(dibujar);
+}
+dibujar();
+
+/* ── Estados de voz ── */
+const TEXTO_ESTADO={espera:"En espera",escuchando:"Escuchando",pensando:"Pensando",hablando:"Hablando"};
+function fijar(e){estado=e;document.body.dataset.estado=e;$("estado").textContent=TEXTO_ESTADO[e];if(reducido)dibujar()}
+
+let micStream=null, analyser=null, buf=null, silencio=0, raf=null;
+async function escuchar(){
+  if(estado!=="espera")return cancelar();
+  fijar("escuchando"); $("usted").textContent=""; $("cerebro").textContent="";
+  try{
+    micStream=await navigator.mediaDevices.getUserMedia({audio:true});   // el audio no sale del equipo
+    const ac=new AudioContext(), src=ac.createMediaStreamSource(micStream);
+    analyser=ac.createAnalyser();analyser.fftSize=512;buf=new Uint8Array(analyser.fftSize);src.connect(analyser);
+    silencio=0; medir(performance.now());
+  }catch{ setTimeout(()=>responder("hola"),1800); }   // sin micrófono: demostración
+}
+function medir(prev){
+  analyser.getByteTimeDomainData(buf);
+  let s=0;for(const v of buf){const d=(v-128)/128;s+=d*d}
+  const rms=Math.sqrt(s/buf.length); ampObj=Math.min(1,rms*6);
+  const ahora=performance.now(); silencio = rms<0.02 ? silencio+(ahora-prev) : 0;
+  if(silencio>1200 && ahora>0){ pararMic(); return responder("hola"); }   // en producción: enviar audio a /voz/turno
+  raf=requestAnimationFrame(()=>medir(ahora));
+}
+function pararMic(){cancelAnimationFrame(raf);micStream&&micStream.getTracks().forEach(t=>t.stop());micStream=null;ampObj=0}
+function cancelar(){pararMic();fijar("espera")}
+
+function responder(entrada){
+  const clave=entrada.toLowerCase().trim().replace(/[¿?¡!]/g,"");
+  $("usted").textContent="Usted: "+entrada;
+  fijar("pensando");
+  setTimeout(()=>{
+    const texto=RESPUESTAS[clave]||"Esa orden aún no la conozco, señor. La dejo en la bandeja.";
+    const el=$("cerebro"); el.innerHTML="";
+    const palabras=texto.split(" ");
+    fijar("hablando");
+    palabras.forEach((w,i)=>setTimeout(()=>{const s=document.createElement("span");s.className="w";s.textContent=w+" ";el.append(s);requestAnimationFrame(()=>s.classList.add("on"));ampObj=0.4+Math.random()*0.5},i*170));
+    setTimeout(()=>{ampObj=0;fijar("espera")},palabras.length*170+500);
+  },900);
+}
+
+/* ── Interacción ── */
+cv.addEventListener("click",escuchar);
+addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT"){ if(e.key==="Escape"){$("entrada").classList.remove("on");$("pista").style.display="";e.target.blur()} return; }
+  if(e.code==="Space"){e.preventDefault();escuchar()}
+  if(e.key==="/"){e.preventDefault();$("pista").style.display="none";$("entrada").classList.add("on");$("texto").focus()}
+});
+$("entrada").addEventListener("submit",e=>{e.preventDefault();const v=$("texto").value.trim();if(v){responder(v);$("texto").value=""}});
+</script>
+</body>
+</html>

@@ -14,3 +14,6 @@ Capturas por voz desde el iPhone. Formato: - AAAA-MM-DD HH:MM — texto. Se vac�
 
 ## Entradas
 - 2026-11-03 23:48 — prueba de voz
+- 2026-11-04 19:40 — ¿? ¿Cuál es su la tarea?
+- 2026-11-04 19:40 — ¿? ¡Hole! ¡Hole!
+- 2026-11-04 19:42 — ¿? ¿Qué puede hacer?

@@ -304,3 +304,20 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Commits locales en `C:\dev\cerebro-voz` (`9cc575b`) y `C:\dev\cerebro-dashboard` (`c749fa8`).
 - **Estado:** modo voz y HUD interactivo 100% operativos, estables y sin recortes.
 - **Siguiente:** continuar con la cola de tareas (`T-20261103-09` HUD v2 o `T-20261103-11` Cerebro Voz fase 2 con Ollama/Gemini).
+
+## 2026-11-04 22:15 — Antigravity (Gemini 3.8 Flash) — cerebro
+- **Hecho:** ejecutada la tarea `T-20261104-13` (HUD v3 con layout definitivo y esfera Three.js superior; sustituye a T-09):
+  - Descargada copia local de la tipografía variable Archivo (`archivo-variable.woff2`, 90 KB con ejes `wght` y `wdth`) a `public/vendor/fonts/` y configurado `@font-face` en `fonts.css`. Cero dependencias externas CDN en producción.
+  - Implementado layout HUD v3 según `HUD_v3_prototipo.html` y la corrección final:
+    - Esfera Three.js conservada en la parte superior del canvas (`public/app.js`), con desplazamiento simplex noise en GPU acotado a lo largo de las normales (3% reposo, hasta 15% con voz), cámara con margen holgado sin recortes, halo dinámico y partículas orbitales interactivas ligadas a tareas pendientes de la cola con raycast tooltip.
+    - Marco de carta con paleta ciruela/carmesí/violeta (`--terreno`, `--curva`, `--hueso`, `--senal`, `--violeta`, `--alerta`).
+    - Cabecera con marca, reloj en vivo, fecha en español, indicador de salud de voz y línea del día 24 h alimentada con las horas de entradas reales de actividad en el registro.
+    - Conversación protagonista debajo de la esfera con animación sincronizada palabra por palabra (`.w.on`).
+    - Márgenes laterales con datos 100% reales de endpoints del backend: prioridades y próxima evaluación (`/api/estado`), tareas pendientes (`/api/cola`), proyecto activo (`/api/proyectos`), salud del sistema (`/api/salud`).
+    - Entrada de texto oculta tras «/» que envía a `/api/voz/turno` y reproduce respuesta por voz; eliminados terminal y botones obsoletos.
+    - Actualización reactiva por SSE (`/api/stream`) suscrita a eventos `vault_change` de chokidar.
+    - Suite de smoke tests `test-api.js` ampliada a 11 pruebas: 11/11 pasadas con éxito.
+  - Commits en `C:\dev\cerebro-dashboard`: `875113d` (layout), `9a0607a` (visual), `8c704d0` (núcleo), `d38ac27` (datos y layout v3 definitivo). Sin push en local.
+  - T-09 marcada como «Sustituida por T-13» y T-13 completada en `00_Sistema_IA/05_Cola_Antigravity.md`.
+- **Estado:** HUD v3 de Cerebro operativo, limpio, reactivo, sin datos inventados y con Three.js local a 60 fps estables.
+- **Siguiente:** en la cola: T-05 bloqueada por guía NotebookLM; T-11 bloqueada a la espera de instalación de Ollama o GEMINI_API_KEY; siguiente tarea ejecutable: T-12 (Montaje F1: motor de subtítulos CLI).

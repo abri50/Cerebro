@@ -44,6 +44,7 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
   10. Actualiza `00_Resumen` (fase 2), Backlog, Decisiones y el registro.
 - **Criterio de hecho:** «¿Qué me recomiendas estudiar hoy?» obtiene una respuesta coherente con `00_Estado_Actual`, con la voz de Cerebro y empezando a hablar en menos de 3 s; sin clave, Cerebro sigue respondiendo por reglas; tests en verde.
 - **Modelo sugerido:** pro
+- **Estado:** Bloqueada: requiere instalación previa de Ollama para Windows por el usuario (o configuración de `GEMINI_API_KEY` en variables de entorno).
 
 - **Ampliación (2026-11-03, prevalece sobre lo anterior):** el LLM es **intercambiable** mediante `llm_provider` en `config.toml`: `ollama` (por defecto) o `gemini`.
   - `ollama`: API local `http://127.0.0.1:11434` (URL configurable para usar la GPU del PC desde el futuro servidor). Modelo configurable (`ollama_model`); prueba un modelo instruct de 7-14B cuantizado con buen español y deja en el README una tabla con latencia y calidad de 3 candidatos medidos con las mismas 10 preguntas.

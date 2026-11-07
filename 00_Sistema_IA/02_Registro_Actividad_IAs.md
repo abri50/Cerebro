@@ -371,3 +371,22 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Actualizados `03_Proyectos/12_Montaje/00_Resumen.md`, `Backlog.md` y movida `T-12` a `## Hechas` en la cola.
 - **Estado:** motor CLI de subtítulos y render 4K TikTok operativo y testeado al 100%. Muestra de vídeo `muestras/prueba.mp4` pendiente de ser aportada por el usuario para calibración final.
 - **Siguiente:** cola de tareas completada (tareas restantes T-05 y T-11 bloqueadas a la espera de entradas del usuario: guía de NotebookLM e instalación de Ollama/Gemini).
+
+## 2026-11-07 13:20 — Antigravity (Gemini 3.8 Flash) — cerebro_voz
+- **Hecho:** ejecutada la tarea `T-20261103-11A` (Cerebro Voz, fase 2: conversación libre LLM - Parte A portátil):
+  - Diseñada e implementada la arquitectura LLM desacoplada en `C:\dev\cerebro-voz\llm.py` con proveedores intercambiables (`ninguno`, `ollama`, `gemini` vía SDK `google-genai`).
+  - Soporte de configuración por máquina mediante `config.local.toml` (ignorado en `.gitignore`), con valor por defecto `provider = "ninguno"` para portátiles sin GPU dedicada.
+  - Implementado sistema de herramientas de bóveda (`VaultTools`):
+    - `leer_nota(ruta)`: acceso restringido dentro de `VAULT_PATH`, omitiendo frontmatter YAML y denegando path traversal y directorios ocultos/internos (`.obsidian`).
+    - `buscar_proyecto(nombre)`: inspección en `03_Proyectos` devolviendo estado, resumen y backlog.
+    - `anotar(texto)`: adición a `00_Sistema_IA/00_Inbox.md` con timestamp.
+    - `tareas_cola()`: lectura de pendientes en `00_Sistema_IA/05_Cola_Antigravity.md`.
+    - `proponer_tarea(titulo, orden, criterio)`: flujo en dos turnos con confirmación explícita previa («¿La añado a la cola, señor?»), escribiendo únicamente tras confirmación afirmativa del usuario («sí», «adelante») y cancelando tras negativa («no», «cancela»).
+  - Control de cuota y persistencia en `logs/uso_llm.json` (`UsageTracker`, límite diario de 200 llamadas), expuesto en `GET /voz/estado`.
+  - Función generadora `split_sentences` para streaming continuo por oraciones hacia Piper TTS.
+  - Cascada en `router.py`: reglas e identidad primero → delegación en LLM → fallback de identidad ante ausencia de clave, fallo de red o agotamiento de cuota. El error no se añade a la memoria de turnos.
+  - Actualizado `server.py` para suministrar hasta 10 turnos limpios en RAM y exponer estado de LLM y cuota en `/voz/estado`.
+  - Creada suite de tests `tests/test_llm.py` con mock LLM (6/6 superados). Suite global de cerebro-voz pasando al 100% (15/15 pruebas en verde). Commit local `8513b0a` en `C:\dev\cerebro-voz`.
+  - Actualizados `03_Proyectos/11_Cerebro_Voz/00_Resumen.md`, `Backlog.md` y `Decisiones.md`. En `00_Sistema_IA/05_Cola_Antigravity.md`, T-11A cerrada en Hechas y T-11B registrada en Pendientes (bloqueada para el PC de sobremesa).
+- **Estado:** fase 2 parte A completada e integrada; Cerebro Voz listo para operar en portátil (modo reglas/identidad o Gemini si se define la variable) y preparado para Ollama en el equipo principal.
+- **Siguiente:** tareas en cola pendientes bloqueadas (T-05 a la espera de la guía NotebookLM; T-11B a la espera del PC de sobremesa).

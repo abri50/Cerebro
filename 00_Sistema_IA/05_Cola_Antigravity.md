@@ -28,32 +28,33 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Modelo sugerido:** flash
 - **Estado:** Bloqueada: a la espera de que el usuario pegue la guía de NotebookLM en `02_Estudios/01_Grado_Ingenieria_Informatica/Asignaturas/01_Curso_1/T1_Trimestre_1/01_Diseno_Programacion_Orientada_Objetos/Apuntes/_Guia_NotebookLM.md`.
 
-##### T-20261103-11 — Cerebro Voz, fase 2: conversación libre (LLM)
+##### T-20261103-11B — Ollama en el PC principal
 - **Proyecto:** cerebro_voz
-- **Depende de:** T-07, T-08, T-10. **BLOQUEADA** hasta que el usuario confirme que la variable de entorno `GEMINI_API_KEY` existe (clave del nivel de pago).
 - **Orden:**
-  1. `llm.py` con el SDK oficial `google-genai`. Modelo configurable en `config.toml` (`llm_model`, por defecto el Gemini Flash vigente; consulta el nombre actual en la documentación oficial, no lo inventes). La clave solo desde la variable de entorno; nunca en archivos ni en la bóveda.
-  2. *System prompt* = contenido de `00_Sistema_IA/07_Identidad_Cerebro.md` + «Responde en español, de usted, en un máximo de 3 frases salvo que se pida detalle. No inventes datos: si no está en el contexto o en una herramienta, dilo».
-  3. Contexto por turno: `00_Estado_Actual.md` (sin frontmatter) + el `00_Resumen.md` del proyecto si el usuario nombra uno + los últimos 10 turnos (en RAM).
-  4. Herramientas (*function calling*): `leer_nota(ruta)` (solo dentro de la bóveda, excluye `.obsidian`), `buscar_proyecto(nombre)`, `anotar(texto)` → bandeja, `tareas_cola()`, `proponer_tarea(titulo, orden, criterio)` → **pide confirmación por voz** («¿La añado a la cola, señor?») y solo escribe tras un «sí».
-  5. Router: reglas primero (fase 1 + identidad); si nada encaja → LLM. Si falta la clave, se agota el límite diario o hay un error de red → respuesta de fallback de la identidad y sigue funcionando por reglas (nunca un callejón sin salida; el error no entra en la memoria de turnos).
-  6. Streaming: divide la respuesta en frases y manda cada frase a Piper en cuanto llega, para que empiece a hablar antes de terminar.
-  7. Chat por texto: en el terminal del HUD, cualquier texto que no sea un comando del HUD va al mismo `POST /voz/turno` (versión texto) y la respuesta aparece y se oye.
-  8. Límites: `max_llm_llamadas_dia` en la configuración (por defecto 200); contador diario en `logs/uso_llm.json` expuesto en `/voz/estado` y en `/api/salud` del HUD (llamadas hoy / límite).
-  9. Tests con el LLM simulado (*mock*): fallback sin clave, límite diario alcanzado, herramienta fuera de la bóveda rechazada, `proponer_tarea` no escribe sin confirmación.
-  10. Actualiza `00_Resumen` (fase 2), Backlog, Decisiones y el registro.
-- **Criterio de hecho:** «¿Qué me recomiendas estudiar hoy?» obtiene una respuesta coherente con `00_Estado_Actual`, con la voz de Cerebro y empezando a hablar en menos de 3 s; sin clave, Cerebro sigue respondiendo por reglas; tests en verde.
+  1. Instalar Ollama para Windows en el PC principal de sobremesa.
+  2. Comprobar con `ollama ps` que el modelo se carga en la GPU (RX 6900 XT, 16 GB) y no en la CPU.
+  3. Probar y medir 3 modelos instruct candidatos (7B-14B cuantizados con buen español) con 10 preguntas de prueba, documentando latencia y calidad en el README.
+  4. Fijar `llm_provider = "ollama"` en `config.local.toml` del PC principal.
+- **Criterio de hecho:** `ollama ps` muestra el modelo en VRAM de la GPU; Cerebro responde preguntas abiertas en < 3 s en el PC; tabla en README.
 - **Modelo sugerido:** pro
-- **Estado:** Bloqueada: requiere instalación previa de Ollama para Windows por el usuario (o configuración de `GEMINI_API_KEY` en variables de entorno).
-
-- **Ampliación (2026-11-03, prevalece sobre lo anterior):** el LLM es **intercambiable** mediante `llm_provider` en `config.toml`: `ollama` (por defecto) o `gemini`.
-  - `ollama`: API local `http://127.0.0.1:11434` (URL configurable para usar la GPU del PC desde el futuro servidor). Modelo configurable (`ollama_model`); prueba un modelo instruct de 7-14B cuantizado con buen español y deja en el README una tabla con latencia y calidad de 3 candidatos medidos con las mismas 10 preguntas.
-  - `gemini`: como se describe arriba (clave de pago en variable de entorno).
-  - Cascada: reglas → `ollama` → `gemini` (solo si hay clave y el usuario lo activa con `llm_fallback = "gemini"`) → fallback de la identidad.
-  - Ya **no está bloqueada**: con Ollama se puede hacer sin clave. La parte de Gemini se prueba solo si `GEMINI_API_KEY` existe.
-  - Paso previo del usuario: instalar Ollama para Windows y comprobar con `ollama ps` que el modelo se carga en la GPU (RX 6900 XT, 16 GB) y no en la CPU.
+- **Estado:** Bloqueada: requiere el PC de sobremesa.
 
 ## Hechas
+##### T-20261103-11A — Cerebro Voz, fase 2: conversación libre (LLM) - Parte A
+- **Proyecto:** cerebro_voz
+- **Resultado:** Completado el 2026-11-07.
+  1. **Arquitectura y Configuración por Equipo:** implementado `llm.py` desacoplado con proveedores intercambiables (`ninguno` | `ollama` | `gemini`). Soporte para `config.local.toml` (ignorado por Git) para definir la configuración específica por máquina. En el portátil queda configurado con `provider = "ninguno"` por defecto (modo reglas puras).
+  2. **Herramientas de Bóveda (Function Calling):**
+     - `leer_nota(ruta)`: lectura segura acotada dentro de `VAULT_PATH`, rechazando path traversal y carpetas ocultas/internas como `.obsidian`. Omite frontmatter YAML.
+     - `buscar_proyecto(nombre)`: búsqueda en `03_Proyectos` devolviendo estado y resumen.
+     - `anotar(texto)`: añade línea a `00_Sistema_IA/00_Inbox.md` con marca de tiempo.
+     - `tareas_cola()`: extrae tareas pendientes de `00_Sistema_IA/05_Cola_Antigravity.md`.
+     - `proponer_tarea(titulo, orden, criterio)`: prepara la propuesta sin escribir en disco, requiriendo confirmación explícita por voz/texto («¿La añado a la cola, señor?»). Solo escribe tras confirmación afirmativa del usuario («sí», «adelante»), permitiendo cancelación («no», «cancela»).
+  3. **Límites y Control de Coste:** implementado `UsageTracker` con persistencia en `logs/uso_llm.json` (máx. 200 llamadas/día por defecto). Expuesto en `GET /voz/estado` del núcleo Python.
+  4. **Streaming por Frases:** función `split_sentences` para trocear la respuesta en oraciones y enviarlas progresivamente a Piper TTS.
+  5. **Integración con Router y Servidor:** `router.py` evalúa reglas e identidad primero; si nada encaja deriva a LLM; ante fallos de red o límite diario recurre al fallback formal de la identidad sin corromper la memoria volátil de turnos. `server.py` pasa el historial de turnos válidos como contexto.
+  6. **Suite de Pruebas Automatizadas:** implementada `tests/test_llm.py` (6/6 pasando) con mock LLM, verificando fallback sin clave, rechazo de límites diarios, seguridad de acceso a la bóveda y flujo condicional de confirmación de tareas. Suite completa de cerebro-voz en verde (15/15 tests superados).
+  7. **Commit Local:** commit `8513b0a` en `C:\dev\cerebro-voz`.
 ##### T-20261103-12 — Montaje F1: motor de subtítulos automáticos (CLI)
 - **Proyecto:** montaje
 - **Resultado:** Completado el 2026-11-04.

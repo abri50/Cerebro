@@ -51,3 +51,7 @@ fuente: "Sesión Claude 2026-11-03"
 ## 2026-11-03 — LLM local primero
 - **Decisión:** la fase 2 usa Ollama en la RX 6900 XT (16 GB) como LLM por defecto; Gemini de pago pasa a ser un respaldo opcional. Proveedor intercambiable por configuración.
 - **Motivo:** hay hardware capaz (antes se creía que no). Coste 0 y privacidad total; la fase 6 del roadmap (cerebro propio) se adelanta. Gemini solo para lo que el modelo local no resuelva bien.
+
+## 2026-11-07 — Configuración de LLM por equipo (T-11A)
+- **Decisión:** `llm_provider` se define en `config.local.toml` (ignorado por Git) para permitir portabilidad entre el portátil (modo solo reglas con provider="ninguno") y el PC de sobremesa (Ollama en GPU RX 6900 XT).
+- **Motivo:** independencia entre hardware de desarrollo y de producción; seguridad y prevención de fallos sin GPU dedicada.

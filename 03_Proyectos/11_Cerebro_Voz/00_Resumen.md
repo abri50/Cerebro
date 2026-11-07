@@ -4,7 +4,7 @@ area: "desarrollo"
 fecha: 2026-11-03
 estado: "activo"
 proyecto: "cerebro_voz"
-siguiente_accion: "Fase 2: conversación libre (LLM intercambiable Ollama/Gemini, T-20261103-11)"
+siguiente_accion: "Fase 2B: Ollama en PC principal con GPU RX 6900 XT y benchmarking de modelos candidatos (T-11B)"
 prioridad: 2
 tags: ["codigo", "proyecto", "voz"]
 generado_por: "claude"

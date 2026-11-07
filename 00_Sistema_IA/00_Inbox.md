@@ -18,3 +18,7 @@ Capturas por voz desde el iPhone. Formato: - AAAA-MM-DD HH:MM — texto. Se vac�
 - 2026-11-04 19:40 — ¿? ¡Hole! ¡Hole!
 - 2026-11-04 19:42 — ¿? ¿Qué puede hacer?
 - 2026-11-04 22:14 — ¿? ¿Qué puedes hacer? Lo voy bajando
+- 2026-11-07 12:09 — ¿? ¿Qué tareas son?
+- 2026-11-07 12:09 — ¿? Nada más que una. De momento. ¿Por qué no tienen los llamas?
+- 2026-11-07 12:55 — ¿? Explícame la diferencia entre TCP y UDP en redes
+- 2026-11-07 12:55 — ¿? Explícame la diferencia entre TCP y UDP en redes

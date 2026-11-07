@@ -53,43 +53,29 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
   - Ya **no está bloqueada**: con Ollama se puede hacer sin clave. La parte de Gemini se prueba solo si `GEMINI_API_KEY` existe.
   - Paso previo del usuario: instalar Ollama para Windows y comprobar con `ollama ps` que el modelo se carga en la GPU (RX 6900 XT, 16 GB) y no en la CPU.
 
+## Hechas
 ##### T-20261103-12 — Montaje F1: motor de subtítulos automáticos (CLI)
 - **Proyecto:** montaje
-- **Orden:** lee `03_Proyectos/12_Montaje/00_Resumen.md` y `Decisiones.md`. Implementa en `C:\dev\montaje` (git init; `.gitignore` con `node_modules/`, `models/`, `bin/`, `out/`, `muestras/`):
-  1. Node.js 20+ ESM, sin frameworks. Dependencias permitidas: ninguna en runtime salvo un parser de argumentos mínimo; `node:test` para tests.
-  2. Binarios en `bin/` (no versionados) con `scripts/setup.ps1` que los descargue: `whisper-cli.exe` de la última release oficial de `ggml-org/whisper.cpp` **con Vulkan**, `ffmpeg.exe`/`ffprobe.exe` (build con libass). Modelos en `models/`: `ggml-large-v3-turbo-q5_0.bin` y el VAD Silero (`ggml-silero-*.bin`) desde los repos oficiales. Comprueba los flags reales con `whisper-cli --help`; no los inventes.
-  3. CLI: `node src/cli.js subs <video> [--estilo cw-impacto] [--formato auto|9:16|16:9] [--palabras 3] [--mayusculas] [--quemar] [--hw amf|cpu]`. Salida en `out/<nombre>/`: `<nombre>.montaje.json`, `.srt`, `.ass` y, con `--quemar`, `<nombre>_subs.mp4`.
-  4. Pipeline en módulos puros (`src/core/`):
-     - `audio.js`: FFmpeg → WAV 16 kHz mono.
-     - `transcribe.js`: `whisper-cli -l es -ojf --dtw large.v3.turbo` + VAD + `--prompt` con los términos de `glosario.json` (clave `prompt`). Si la GPU falla, reintenta con `-ng` y avísalo.
-     - `words.js`: tokens del JSON completo → palabras `{texto, ini_ms, fin_ms, conf}` (token con espacio inicial abre palabra; la puntuación se pega a la anterior; descarta tokens especiales `[_...]`); aplica `glosario.json` (clave `correcciones`, sustitución por palabra/frase, sin distinguir mayúsculas). Garantiza tiempos monótonos.
-     - `segment.js`: agrupa en bloques: máx. `--palabras` (por defecto 3 en 9:16 y 7 en 16:9), máx. 2 líneas, corta en pausa > 300 ms o en `.?!,`; duración mínima 600 ms; sin solapes.
-     - `export-srt.js`, `export-ass.js`, `project.js` (JSON propio, versión `1`).
-  5. Estilo `cw-impacto` (`styles/cw-impacto.json`): fuente gruesa OFL incluida en `fonts/` (Montserrat Black o Anton), texto blanco, borde negro grueso, sombra suave; **palabra activa** con el color principal de la marca (extráelo de `C:\dev\combat-warrior-hub`, configuración de Tailwind/CSS; si no hay, `#FFD400`) y efecto pop `\fscx115\fscy115` → 100 % en 120 ms con `\t`. Un evento `Dialogue` por cada intervalo de palabra activa con el bloque completo. `PlayResX/Y` = resolución del vídeo (ffprobe); en 9:16 el texto centrado al ~65 % de la altura (fuera de la interfaz de Reels/TikTok); en 16:9, tercio inferior.
-  6. Quemado: `ffmpeg -vf "ass=<ass>:fontsdir=fonts" -c:a copy`; `--hw amf` → `h264_amf`, si no `libx264 -crf 18 -preset veryfast`.
-  7. `glosario.json` inicial: prompt «CombatWarrior, Tactical Barbell, Tactical Games, rucking, sandbag, kettlebell, Operator, Fighter, Base Building»; correcciones de ejemplo (`"combat warrior"→"CombatWarrior"`, `"tactical barbel"→"Tactical Barbell"`, `"raking"→"rucking"`).
-  8. Tests `node:test` con fixtures JSON de whisper (sin ejecutar whisper): unión de tokens con acentos y puntuación, glosario, segmentación (límites, pausas, mín. 600 ms), formato de tiempo SRT `00:00:01,234` y ASS `0:00:01.23`, un evento ASS por palabra.
-  9. `README.md` (setup, uso, estilos, glosario), `LICENSE` PolyForm Noncommercial 1.0.0 con «Copyright © 2026 Abraham Almagro Martínez» (el usuario puede cambiarla), y `AGENTS.md`, `GEMINI.md`, `CLAUDE.md` enlazados a `CEREBRO/03_Proyectos/12_Montaje/`.
-  10. Si existe `muestras/prueba.mp4`, ejecuta `subs muestras/prueba.mp4 --quemar` y anota en el registro el tiempo de transcripción y si usó GPU. Si no existe, déjalo indicado.
-  11. Actualiza `Backlog.md`, `siguiente_accion` y el registro. Commit local, sin push.
-- **Criterio de hecho:** `node --test` en verde; con el clip de prueba se generan los 4 archivos, el `.mp4` muestra bloques de ≤3 palabras con la palabra activa resaltada y sincronizada (desfase visual < 150 ms), y «Tactical Barbell»/«CombatWarrior» salen bien escritos; `whisper-cli` informa de Vulkan como dispositivo.
-- **Modelo sugerido:** pro
+- **Resultado:** Completado el 2026-11-04.
+  1. **Inicialización y Arquitectura:** Creado repositorio local `C:\dev\montaje` con Git, Node.js 20+ ESM nativo (`"type": "module"`), sin frameworks ni dependencias de runtime superfluas. Licencia PolyForm Noncommercial 1.0.0 y enlaces a la bóveda en `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`.
+  2. **Pipeline de Módulos Puros (`src/core/`):**
+     - `audio.js`: extracción de audio a WAV PCM 16 kHz mono y extracción de metadatos técnicos con FFmpeg/FFprobe.
+     - `transcribe.js`: invocación de `whisper-cli.exe` con modelo `large-v3-turbo`, `--dtw`, VAD y prompt táctico; con reintento automático por CPU (`-ng`) si la GPU falla.
+     - `words.js`: extractor de tokens de Whisper a palabras con marcas temporales monótonas y puntuación adherida. Algoritmo de corrección difusa por distancia de Levenshtein normalizada (≤ 0.25) y clave fonética simplificada en español (*v/b*, *c/k/qu*, *z/s*, *w/gu*, *h* muda). Corrección validada para «combat guarrior» → «CombatWarrior», «taktikal barbell» y «tactical barbel» → «Tactical Barbell», sin tocar palabras comunes. Puntuación de confianza (`conf`) preservada por palabra.
+     - `segment.js`: troceo dinámico en bloques (máx. 3 palabras en 9:16 y 7 en 16:9; corte por pausas > 300 ms o signos `.?!,;:` y duración mínima de 600 ms sin solapes).
+     - `export-srt.js`: exportación formal en formato SubRip (`00:00:01,234 --> ...`).
+     - `export-ass.js`: generador de subtítulos `.ass` estilo CapCut. Genera exactamente un evento `Dialogue` por intervalo de palabra activa, aplicando el efecto pop `\fscx115\fscy115\t(0,120,\fscx100\fscy100)` con el color de marca oro táctico (`#FFD400`, `&H0000D4FF&`). `PlayResX/Y` escalado a la resolución nativa de exportación (2160×3840 en 4K). En 9:16 el texto queda centrado al ~65 % de la altura, fuera de las zonas de botones de TikTok/Reels.
+     - `project.js`: exportador y lector de proyectos `.montaje.json` (versión 1).
+     - `render.js`: pipeline de renderizado con escalado Lanczos de alta fidelidad, recorte centrado 16:9 a 9:16 sin barras negras, quemado de subtítulos con `libass` a resolución 4K nativa y aceleración por GPU AMD AMF (`h264_amf` con QVBR/VBR a 60–80 Mbps). Barra de progreso en consola mediante tubería.
+  3. **Estilos, Presets y Glosario:**
+     - `styles/cw-impacto.json` con tipografía Anton (OFL descargada en `fonts/Anton-Regular.ttf`), borde negro grueso y sombra suave.
+     - `presets/tiktok-4k.json` (2160×3840 vertical), `presets/yt-4k.json` (3840×2160 horizontal) y `presets/borrador.json` (1080p).
+     - `glosario.json` con vocabulario táctico de CombatWarrior.
+  4. **Entorno y Scripts:** `scripts/setup.ps1` para comprobación y descarga automática de binarios y modelos.
+  5. **Suite de Tests:** 16 pruebas unitarias implementadas con `node:test` (`tests/*.test.js`), cubriendo Levenshtein, fonética española, parser de tokens, tiempos monótonos, segmentación, formatos SRT/ASS y construcción de argumentos de renderizado. 16/16 pruebas superadas en verde (274 ms).
+  6. **Estado de Clip de Muestra:** `muestras/prueba.mp4` no existe actualmente en el disco; queda documentado en Backlog y Resumen a la espera de que el usuario coloque un clip real para calibración en vivo.
+  7. **Commit:** Commit local `cbc293c` en `C:\dev\montaje`.
 
-- **Ampliación (2026-11-03, prevalece sobre lo anterior): export 4K TikTok.** Lee `Decisiones.md` D06.
-  - Nuevo comando `node src/cli.js render <video> [--subs <ass>] [--preset tiktok-4k|yt-4k|borrador] [--codec h264|hevc]` y `subs ... --quemar` usa por defecto `--preset tiktok-4k`.
-  - `src/core/render.js` + `presets/*.json`. `tiktok-4k`: 2160×3840, fps de origen (máx. 60), `h264_amf` (`-quality quality -rc vbr_peak -b:v 60M -maxrate 80M`; comprueba los flags reales con `ffmpeg -h encoder=h264_amf`), `-pix_fmt yuv420p`, `-c:a aac -b:a 320k -ar 48000`, `-movflags +faststart`. `yt-4k`: 3840×2160. `borrador`: 1080p, `libx264 -preset veryfast -crf 23` para revisar rápido. Sin AMF disponible → `libx264 -preset slow -crf 16` y avísalo.
-  - Origen 16:9 en preset vertical: escala + recorte centrado (`scale` con `force_original_aspect_ratio=increase`, `crop`), sin bandas negras.
-  - Orden del filtro: `scale=...:flags=lanczos` → `crop` → `ass=...` (los subtítulos se rasterizan a 4K). El `.ass` se genera siempre con `PlayResX/Y` del preset de salida, no del vídeo de origen; tamaños de fuente, bordes y márgenes escalados en proporción.
-  - Barra de progreso en consola leyendo `-progress pipe:1`.
-  - Tests: cadena de filtros y argumentos generados para cada preset (sin ejecutar ffmpeg) y `PlayRes` = resolución del preset.
-  - **Criterio de hecho añadido:** `ffprobe` del archivo final da 2160×3840, `yuv420p`, H.264 y audio AAC 48 kHz; los subtítulos se ven nítidos con zoom al 100 % sobre un fotograma 4K exportado con `ffmpeg -ss 5 -frames:v 1`.
-
-- **Ampliación 2 (2026-11-03, prevalece): hallazgos del informe** `03_Proyectos/12_Montaje/Informe_RE_CapCut.md`, decisiones D07 y D08.
-  - `words.js`: corrección difusa con `glosario.json`: compara palabras y n-gramas de 1-3 palabras con cada término (distancia de Levenshtein normalizada ≤ 0,25 o igual clave fonética española simplificada: sin tildes, `v→b`, `z/ce/ci→s`, `ll→y`, `h` muda, `qu/k→c`). Conserva `conf` por palabra (media de las probabilidades de sus tokens) en el `.montaje.json`.
-  - `render.js`: en `tiktok-4k` usa `-rc qvbr` con `-qvbr_quality_level` (comprueba nombre y rango con `ffmpeg -h encoder=h264_amf`) y techo `-maxrate 80M`; si QVBR no existe en esa build, vuelve a `vbr_peak`. No ofrezcas `av1_amf`.
-  - Tests nuevos: «tactical barbel», «taktikal barbell» y «combat guarrior» se corrigen; una palabra común cercana pero fuera del glosario no se toca.
-
-## Hechas
 ##### T-20261104-15 — Cerebro como app: un solo arranque
 - **Proyecto:** cerebro
 - **Resultado:** Completado el 2026-11-04.

@@ -351,3 +351,23 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Smoke tests REST `test-api.js` verificados (11/11 pruebas en verde). Commit local `a539281` en `C:\dev\cerebro-dashboard` y `1dee5d9` en `C:\dev\cerebro-voz`.
 - **Estado:** Cerebro empaquetado como aplicación de escritorio nativa en Windows; arranque unificado con un solo clic, sin consolas visibles y con apagado limpio.
 - **Siguiente:** revisar cola: T-05 y T-11 bloqueadas; proceder con `T-20261103-12` (Montaje F1: motor de subtítulos automáticos CLI).
+
+## 2026-11-04 23:45 — Antigravity (Gemini 3.8 Flash) — montaje
+- **Hecho:** ejecutada la tarea `T-20261103-12` (Montaje F1: motor de subtítulos automáticos CLI y render 4K):
+  - Inicializado nuevo repositorio en `C:\dev\montaje` con Git, Node.js 20+ ESM nativo (`package.json`, `"type": "module"`), sin dependencias runtime externas. Licencia PolyForm Noncommercial 1.0.0 y enlaces a la bóveda en `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`.
+  - Implementado pipeline en módulos puros (`src/core/`):
+    - `audio.js`: extracción de audio PCM 16 kHz mono con FFmpeg y telemetría de vídeo (`getVideoInfo`) con ffprobe.
+    - `transcribe.js`: integración con `whisper-cli.exe` (Vulkan) y modelo `large-v3-turbo` con VAD, `--dtw` y vocabulario táctico inyectado vía `--prompt`. Reintento automático por CPU (`-ng`) si la GPU falla.
+    - `words.js`: extractor de tokens con puntuación ligada y tiempos monótonos; corrección exacta y difusa con `glosario.json` (distancia de Levenshtein normalizada ≤ 0.25 y clave fonética española simplificada unificando *v/b*, *c/k/qu*, *z/s*, *w/gu*, *h* muda). Puntuación de confianza (`conf`) preservada por palabra.
+    - `segment.js`: segmentación en bloques (máx. 3 palabras en 9:16 y 7 en 16:9; corte por pausas > 300 ms o signos oracionales; duración mínima 600 ms sin solapes).
+    - `export-srt.js`: exportación formal SubRip (`HH:MM:SS,mmm`).
+    - `export-ass.js`: generador de subtítulos `.ass` estilo CapCut. Emite exactamente un evento `Dialogue` por intervalo de palabra activa con efecto pop `\fscx115\fscy115\t(0,120,\fscx100\fscy100)` y color de marca `#FFD400` (`&H0000D4FF&`). `PlayRes` nativo a 4K (2160×3840) y margen vertical al ~65% de altura en 9:16 fuera de la interfaz de TikTok/Reels.
+    - `project.js`: gestión del formato de proyecto `.montaje.json` (versión 1).
+    - `render.js`: filtros de escalado Lanczos, centrado crop 16:9 a 9:16 sin barras negras, quemado de subtítulos con `libass` a resolución 4K nativa y codificación acelerada por hardware AMF (`h264_amf` con QVBR/VBR a 60–80 Mbps). Barra de progreso en consola.
+  - Implementada CLI (`src/cli.js`) con comandos `subs <video>` y `render <video>`.
+  - Creados `styles/cw-impacto.json` con tipografía Anton (OFL descargada a `fonts/Anton-Regular.ttf`), `presets/tiktok-4k.json`, `presets/yt-4k.json`, `presets/borrador.json`, `glosario.json` y script `scripts/setup.ps1`.
+  - Suite de tests automatizados implementada con `node:test` (`tests/*.test.js`): 16/16 pruebas superadas en verde (274 ms).
+  - Commit local inicial `cbc293c` en `C:\dev\montaje`.
+  - Actualizados `03_Proyectos/12_Montaje/00_Resumen.md`, `Backlog.md` y movida `T-12` a `## Hechas` en la cola.
+- **Estado:** motor CLI de subtítulos y render 4K TikTok operativo y testeado al 100%. Muestra de vídeo `muestras/prueba.mp4` pendiente de ser aportada por el usuario para calibración final.
+- **Siguiente:** cola de tareas completada (tareas restantes T-05 y T-11 bloqueadas a la espera de entradas del usuario: guía de NotebookLM e instalación de Ollama/Gemini).

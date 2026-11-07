@@ -4,7 +4,7 @@ area: "desarrollo"
 fecha: 2026-11-03
 estado: "activo"
 proyecto: "montaje"
-siguiente_accion: "Antigravity: ejecuta la cola (T-20261103-12, motor de subtítulos + export 4K). Usuario: dejar un clip real en C:\\dev\\montaje\\muestras\\prueba.mp4"
+siguiente_accion: "Usuario: dejar un clip real con voz en C:\\dev\\montaje\\muestras\\prueba.mp4 para prueba de quemado y calibración fina. Siguiente desarrollo: F2 (Editor de subtítulos en Electron)."
 prioridad: 2
 stack: [electron, vanilla-js, ffmpeg, whisper-cpp]
 tags: ["codigo", "proyecto", "combatwarrior", "video"]
@@ -33,13 +33,13 @@ Diseño y código propios. CapCut solo es la referencia de qué funciones merece
 | Proyecto | JSON propio (`.montaje.json`) |
 
 ## Fases
-1. **F1 — Motor CLI** (en cola): vídeo → subtítulos (`.json`, `.srt`, `.ass`) → render 4K TikTok.
+1. **F1 — Motor CLI** (Completada): vídeo → subtítulos (`.json`, `.srt`, `.ass` con pop CapCut) → render 4K TikTok (AMF / Lanczos).
 2. **F2 — Editor de subtítulos**: vista previa, forma de onda, corregir palabras, retemporizar, presets de estilo.
 3. **F3 — Línea de tiempo básica**: cortar, recortar, dividir, música con *ducking*, eliminar silencios automática.
 4. **F4 — Extras**: auto-reencuadre 16:9 → 9:16, plantillas de marca (intro, logo, outro), LUT.
 
 ## Repositorio
-- **Ruta local:** `C:\dev\montaje` (pendiente de crear)
+- **Ruta local:** `C:\dev\montaje` (inicializado, 16 tests pasando en verde)
 - **Remoto:** `abri50/montaje` (pendiente)
 - **Licencia:** PolyForm Noncommercial 1.0.0 (uso personal).
 

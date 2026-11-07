@@ -13,7 +13,7 @@ fuente: "conocimiento del modelo"
 # Backlog — Montaje
 
 ## En curso
-- [ ] F1 — Motor de subtítulos CLI (T-20261103-12 en la cola de Antigravity)
+- [ ] Usuario: dejar un clip real de 30-90 s con voz en `C:\dev\montaje\muestras\prueba.mp4` para prueba de quemado y calibración
 
 ## Usuario
 - [ ] Dejar un clip real de 30-90 s con voz en `C:\dev\montaje\muestras\prueba.mp4` (mejor si es 4K o 1080p de móvil)
@@ -30,4 +30,5 @@ fuente: "conocimiento del modelo"
 - [ ] Importador de borradores de CapCut (solo si su formato es legible)
 
 ## Hecho
+- [x] 2026-11-04 F1 — Motor de subtítulos CLI y render 4K TikTok (T-20261103-12, commit `cbc293c`)
 - [x] 2026-11-03 Arquitectura y decisiones D01-D05

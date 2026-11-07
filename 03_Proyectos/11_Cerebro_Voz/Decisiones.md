@@ -55,3 +55,7 @@ fuente: "Sesión Claude 2026-11-03"
 ## 2026-11-07 — Configuración de LLM por equipo (T-11A)
 - **Decisión:** `llm_provider` se define en `config.local.toml` (ignorado por Git) para permitir portabilidad entre el portátil (modo solo reglas con provider="ninguno") y el PC de sobremesa (Ollama en GPU RX 6900 XT).
 - **Motivo:** independencia entre hardware de desarrollo y de producción; seguridad y prevención de fallos sin GPU dedicada.
+
+## 2026-11-07 — Arquitectura de palabra de activación e interfaz DetectorActivacion (T-16)
+- **Decisión:** la detección de la palabra de activación («Oye Cerebro») se encapsula tras la interfaz abstracta `DetectorActivacion` (con implementaciones `openwakeword`, `porcupine` y `mock`), operando con un hilo continuo de captura en bloques de 80 ms y descarte de audio en memoria. El micrófono se gestiona mediante exclusión mutua cooperativa (`MicrophoneLock`), pausando la escucha continua cuando el usuario interactúa por clic/atajo. Tras responder se abre una ventana de réplica de 8 segundos sin requerir la palabra clave. Se implementan comandos de control por voz («deja de escuchar» / «vuelve a escuchar») y comando HUD `/escucha`.
+- **Motivo:** desacoplar completamente la infraestructura de audio del motor acústico específico (permitiendo portar a `onnxruntime-web` en PWA o cambiar de motor según el hardware disponible), garantizando privacidad estricta y evitando colisiones de micrófono.

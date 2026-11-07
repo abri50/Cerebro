@@ -16,6 +16,7 @@ fuente: "Sesión Claude 2026-11-03"
 - [x] (Antigravity) T-20261103-10 Identidad de Cerebro en el router de voz.
 - [x] (Antigravity) T-20261103-08 Modo conversación en la interfaz CEREBRO // CORE (127.0.0.1:3000).
 - [x] (Antigravity) T-20261103-11A Fase 2A: conversación libre con LLM intercambiable (Ollama / Gemini), herramientas de bóveda y límites diarios.
+- [x] (Antigravity) T-20261107-16 Palabra de activación «Oye Cerebro»: arquitectura DetectorActivacion, exclusión mutua, ventana de réplica y control SSE.
 - [ ] (Usuario / Antigravity) T-20261103-11B Fase 2B: Ollama en PC principal con RX 6900 XT y medición de modelos candidatos.
 - [ ] (Usuario) Probar la fase 1 y elegir el ajuste de voz definitivo entre las 3 variantes que genere Antigravity.
 

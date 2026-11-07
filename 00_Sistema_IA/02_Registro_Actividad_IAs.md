@@ -390,3 +390,26 @@ Las entradas se añaden al final, la más reciente abajo. Formato:
   - Actualizados `03_Proyectos/11_Cerebro_Voz/00_Resumen.md`, `Backlog.md` y `Decisiones.md`. En `00_Sistema_IA/05_Cola_Antigravity.md`, T-11A cerrada en Hechas y T-11B registrada en Pendientes (bloqueada para el PC de sobremesa).
 - **Estado:** fase 2 parte A completada e integrada; Cerebro Voz listo para operar en portátil (modo reglas/identidad o Gemini si se define la variable) y preparado para Ollama en el equipo principal.
 - **Siguiente:** tareas en cola pendientes bloqueadas (T-05 a la espera de la guía NotebookLM; T-11B a la espera del PC de sobremesa).
+
+## 2026-11-07 13:50 — Antigravity (Gemini 3.8 Flash) — cerebro_voz
+- **Hecho:** ejecutada la tarea `T-20261107-16` (Palabra de activación «Oye Cerebro»):
+  - Evaluada la viabilidad del entrenamiento local de openWakeWord en portátil Windows (inviable por carecer de dependencias POSIX para piper-sample-generator y de GPU CUDA). Conforme a la instrucción del usuario, se implementó la infraestructura desacoplada completa:
+  - Creado módulo `C:\dev\cerebro-voz\wake_word.py`:
+    - Interfaz abstracta `DetectorActivacion` con métodos `cargar()`, `procesar_bloque()` y `reset()`, implementada por `DetectorMock`, `DetectorOpenWakeWord` (preparado para `models/oye_cerebro.onnx` vía ONNXRuntime) y `DetectorPorcupine`.
+    - Oyente continuo en segundo plano `WakeWordListener` con `sounddevice` en bloques de 80 ms (1280 muestras a 16 kHz mono) y descarte inmediato de audio en memoria sin persistencia en disco hasta activación. VAD por umbral de energía RMS (< 0.003).
+    - Control de concurrencia y exclusión mutua `MicrophoneLock`: garantiza un único dueño del micrófono en todo momento, pausando la captura de la palabra clave si el HUD o la tecla graba un turno.
+    - Notificador HTTP a CEREBRO Core (`notificar_hud_despertar`) mediante biblioteca estándar `http.client` para mantener aislamiento de red.
+  - Integrado ciclo de despertar en `server.py` y `main.py`:
+    - Emisión del evento SSE `despertar` al dashboard (`POST /api/eventos`).
+    - Grabación con detección de silencio, transcripción local, resolución de turno y síntesis de voz.
+    - Ventana de réplica de 8 segundos para réplicas encadenadas sin repetir «Oye Cerebro».
+  - Comandos de control implementados:
+    - Comandos de voz en `router.py`: «Cerebro, deja de escuchar» (pausa la escucha activa) y «Cerebro, vuelve a escuchar» (la reanuda).
+    - Endpoints `GET /voz/escucha` y `POST /voz/escucha` en `server.py`.
+    - Dashboard: comando de terminal `/escucha`, proxies `/api/voz/escucha`, endpoint `/api/eventos`, e indicador en cabecera (`«Voz local lista · Escucha activa»` / `«Voz local lista · Escucha pausada»`).
+  - Suites de pruebas:
+    - Creada suite `tests/test_wake_word.py` (5/5 superadas). Suite completa de `cerebro-voz` en verde (20/20 pruebas). Commit local `096bd09` en `C:\dev\cerebro-voz`.
+    - Ampliado `test-api.js` en `cerebro-dashboard` (12/12 superadas). Commit local `a513313` en `C:\dev\cerebro-dashboard`.
+  - Actualizados `03_Proyectos/11_Cerebro_Voz/Backlog.md`, `Decisiones.md` y `00_Sistema_IA/05_Cola_Antigravity.md` (T-16 movida a Hechas).
+- **Estado:** arquitectura de palabra de activación «Oye Cerebro», exclusión mutua de micrófono, réplica de 8 s, eventos SSE y controles por voz/HUD totalmente implementados y verificados.
+- **Siguiente:** pendientes en cola bloqueadas (T-05 espera guía NotebookLM; T-11B espera PC de sobremesa).

@@ -22,3 +22,7 @@ Capturas por voz desde el iPhone. Formato: - AAAA-MM-DD HH:MM — texto. Se vac�
 - 2026-11-07 12:09 — ¿? Nada más que una. De momento. ¿Por qué no tienen los llamas?
 - 2026-11-07 12:55 — ¿? Explícame la diferencia entre TCP y UDP en redes
 - 2026-11-07 12:55 — ¿? Explícame la diferencia entre TCP y UDP en redes
+- 2026-11-07 13:25 — ¿? ¿Cuál es la dotarea?
+- 2026-11-07 13:34 — ¿? Explícame la diferencia entre TCP y UDP en redes
+- 2026-11-07 13:38 — ¿? Explícame la diferencia entre TCP y UDP en redes
+- 2026-11-07 13:41 — ¿? Explícame la diferencia entre TCP y UDP en redes

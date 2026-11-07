@@ -40,6 +40,24 @@ Formato de cada tarea (las añade Claude u otra IA al final de "Pendientes"):
 - **Estado:** Bloqueada: requiere el PC de sobremesa.
 
 ## Hechas
+##### T-20261107-16 — Palabra de activación «Oye Cerebro»
+- **Proyecto:** cerebro_voz
+- **Resultado:** Completado el 2026-11-07.
+  1. **Evaluación de viabilidad y arquitectura desacoplada:** El entrenamiento sintético local de openWakeWord requiere dependencias POSIX/Linux (`piper-sample-generator`) y datasets masivos no viables en Windows/portátil CPU. Siguiendo la decisión del usuario, se implementó toda la infraestructura base modular tras la interfaz abstracta `DetectorActivacion` en `C:\dev\cerebro-voz\wake_word.py`, con implementaciones `DetectorMock`, `DetectorOpenWakeWord` (preparado para `models/oye_cerebro.onnx` con ONNXRuntime) y `DetectorPorcupine`.
+  2. **Escucha continua y privacidad estricta:** Implementado `WakeWordListener` en hilo en segundo plano con `sounddevice` en bloques de 80 ms (1280 muestras a 16 kHz mono). El audio se analiza en memoria y se descarta de inmediato; no se almacena ni persiste nada hasta que se detecta la palabra. VAD por compuerta de energía (RMS < 0.003) para evitar cómputo de inferencia en silencio.
+  3. **Exclusión mutua del micrófono (`MicrophoneLock`):** Sistema thread-safe de bloqueo de dispositivo. Garantiza un único dueño del micrófono a la vez; si el usuario inicia un turno mediante clic en el HUD o atajo de teclado, la escucha de la palabra clave cede el acceso cooperativamente sin colisiones de audio.
+  4. **Ciclo de turno y ventana de réplica:** Al detectar la palabra de activación:
+     - Emite el evento reactivo `despertar` vía HTTP hacia `POST /api/eventos` del dashboard, difundiéndolo por SSE (`/api/stream`) a los clientes web (la esfera cambia a «Escuchando» y emite un tono suave de aviso).
+     - Graba el turno con detección de silencio (`AudioRecorder`), transcribe con `faster-whisper`, procesa el turno con `router.py` y reproduce la respuesta sintetizada mediante `tts.speak()`.
+     - Abre una ventana de réplica interactiva de 8 segundos permitiendo réplicas encadenadas sin repetir «Oye Cerebro», regresando a reposo tras agotarse el tiempo en silencio.
+  5. **Comandos de voz y control en el HUD:**
+     - Comandos de voz en el router: *«Cerebro, deja de escuchar»* (pausa la escucha activa) y *«Cerebro, vuelve a escuchar»* (la reanuda).
+     - Endpoint REST `GET /voz/escucha` y `POST /voz/escucha` (con toggle en el backend Node y estado en `/api/salud`).
+     - Comando de consola interactiva `/escucha` en el HUD.
+     - Indicador en tiempo real en la cabecera: `«Voz local lista · Escucha activa»` / `«Voz local lista · Escucha pausada»`.
+  6. **Suite de tests automatizados y commits:**
+     - Creada suite unitaria `tests/test_wake_word.py` (5/5 superadas) validando muestras positivas y negativas, exclusión de micrófono, pausa/reanudación y comandos de voz. Suite completa de `cerebro-voz` en verde (20/20 pruebas). Commit local `096bd09` en `C:\dev\cerebro-voz`.
+     - Suite REST de `cerebro-dashboard` ampliada en `test-api.js` (12/12 superadas). Commit local `a513313` en `C:\dev\cerebro-dashboard`.
 ##### T-20261103-11A — Cerebro Voz, fase 2: conversación libre (LLM) - Parte A
 - **Proyecto:** cerebro_voz
 - **Resultado:** Completado el 2026-11-07.
